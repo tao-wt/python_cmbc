@@ -1,1 +1,293 @@
-#!/bin/envspacebashPLY#spacewriterspaceSY60216PLY#space脚本功能：版本的备份与更新space须1个目标版本参数(绝对路径)PLY#spaceusage：spacePLY#TABTABTABbashspacebackupAndUpdate.shspace"/sourcePath/(filename|dirname)"PLYPLYIFS=$'space\t\n'PLYsource=$1PLYiuser=$(whoami)PLYechospaceuserspaceis:$iuserPLYtypesetspace-lspacemod;typesetspace-lspacepub;PLYmodError1="";pubError1="";modfinish="";pubfinish="";modCheckOk="";pubCheckOk="";PLYmodError2="";modError3="";modsum=0;pubsum=0;PLYpubError2="";pubError3=""PLYPLYrun(){PLYTABforspacemspaceinspace$1PLYTABdoPLYTABTABbackupAndupdate_modspace$mPLYTABTABcasespace$?spaceinPLYTABTABTAB2)PLYTABTABTABTABmodError2=${modError2}","$mPLYTABTABTABTAB;;PLYTABTABTAB3)PLYTABTABTABTABmodError3=${modError3}","$mPLYTABTABTABTAB;;PLYTABTABTAB0)PLYTABTABTABTABmodfinish=${modfinish}","$mPLYTABTABTABTAB;;PLYTABTABesacPLYTABdonePLYTABbackupAndupdate_pubspace$(echospace$2)PLY}PLYPLYmod_check(){PLYTABifspace[space-dspace"/home/$iuser/innerapp/${1}"space];thenPLYTABTABreturnspace0PLYTABelsePLYTABTABreturnspace1PLYTABfiPLY}PLYpub_check(){PLYTABifspace[space-dspace"/home/$iuser/webhome/${1}"space];thenPLYTABTABreturnspace0PLYTABelsePLYTABTABreturnspace1PLYTABfiPLY}PLYPLYbackupAndupdate_mod(){PLYTAB#依据mod_lib文件夹备份和更新mod版本PLYTABechospace=======================${1}===============================PLYTABlocalspaceresult=0PLYTABechospacestartspacebackupspacethespacemodulespace:space$1PLYTABmkdirspace-pspace/home/$iuser/backup/bak_$(datespace+%F)/$1PLYTABfindspace/home/$iuser/innerapp/space-namespace${1}.jarspace|spacexargsspace-n1space-ispace-tspacemvspace-fspace{}space/home/$iuser/backup/bak_$(datespace+%F)/${1}/space||spaceresult=2PLYTABfindspace/home/$iuser/innerapp/space-namespace${1}_libspace-typespacedspace|spacexargsspace-n1space-ispace-tspacemvspace-fspace{}space/home/$iuser/backup/bak_$(datespace+%F)/${1}/space||spaceresult=2PLYTABifspace[space$resultspace-eqspace0space]PLYTABthenPLYTABTABechospace$1spacebackupspacesuccess,nowspacestartingspaceupdate...PLYTABTABfindspace/tmp/$(datespace+%m%d)/$dirname/space-namespace${1}.jarspace-typespacefspace|spacexargsspace-n1space-ispace-tspacecpspace{}space/home/$iuser/innerapp/${1}/space||spaceresult=3PLYTABTABfindspace/tmp/$(datespace+%m%d)/$dirname/space-namespace${1}_libspace-typespacedspace|spacexargsspace-n1space-ispace-tspacecpspace-rspace{}space/home/$iuser/innerapp/${1}/space||spaceresult=3PLYTABTABifspace[space$resultspace-eqspace0space]PLYTABTABthenPLYTABTABTABechospace$1spaceupdatespacesuccess!PLYTABTABfiPLYTABelsePLYTABTABechospace$1spacebackupspacefailed!PLYTABfiPLYTABreturnspace$resultPLY}PLYPLYbackupAndupdate_pub(){PLYTAB#根据war包,备份与更新订阅号平台PLYTABwhilespacetestspace$#space-gtspace1PLYTABdoPLYTABTABechospace=======================${1}===============================PLYTABTABlocalspaceresult=0PLYTABTABifspace[space"X$2"space=space"Xwebmanager"space];thenPLYTABTABTABechospacebackupspacewebmanagerspaceconfigspacefiles.PLYTABTABTABpushdspace/home/$iuser/webhome/$2space>/dev/nullPLYTABTABTABTABzipspace-qspace../webmanagerConf.zipspace./dbconfiglogger.propertiesspace./dbconfig.propertiesspace./webmgr.propertiesspace./WEB-INF/classes/dbconfig.propertiesspace./WEB-INF/classes/config/spring.xmlPLYTABTABTABpopdspace>/dev/nullPLYTABTABTABechospacebackupspacefinish.PLYTABTABfiPLYTABTABechospacestartspacebackupspacethespacepubspace:space$2PLYTABTABfindspace/home/$iuser/webhome/space-maxdepthspace1space-namespace${2}space-typespacedspace2>/dev/nullspace|spacexargsspace-n1space-ispace-tspacemvspace-fspace{}space/home/$iuser/backup/bak_$(datespace+%F)/space||spaceresult=2PLYTABTABifspace[space$resultspace-eqspace0space]PLYTABTABthenPLYTABTABTABechospace$1spacebackupspacesuccess,nowspacestartingspaceupdate...PLYTABTABTABfindspace/tmp/$(datespace+%m%d)/$dirname/space-namespace"${1}.*war"space-typespacefspace|spacexargsspace-n1space-ispace-tspaceunzipspace-ospace{}space-dspace/home/$iuser/webhome/$2/space>/dev/nullspace||spaceresult=3PLYTABTABTABfindspace/tmp/$(datespace+%m%d)/$dirname/space-namespace"${1}.*war"space-typespacefspace|spacexargsspace-n1space-ispace-tspacecpspace{}space/home/$iuser/webhome/${2}/PLYTABTABTABifspace[space$resultspace-eqspace0space]PLYTABTABTABthenPLYTABTABTABTABifspace[space"X$2"space=space"Xwebmanager"space];thenPLYTABTABTABTABTABechospaceupdatespacewebmanagerspaceconfigspacefiles.PLYTABTABTABTABTABpushdspace/home/$iuser/webhome/$2space>/dev/nullPLYTABTABTABTABTABTABunzipspace-qspace-ospace../webmanagerConf.zipspace-dspace.PLYTABTABTABTABTABpopdspace>/dev/nullPLYTABTABTABTABTABechospaceupdatespacefinish.PLYTABTABTABTABfiPLYTABTABTABTABechospace$1spaceupdatespacesuccess!PLYTABTABTABfiPLYTABTABelsePLYTABTABTABechospace$1spacebackupspacefailed!PLYTABTABfiPLYTABTABcasespace$resultspaceinPLYTABTABTAB2)PLYTABTABTABTABpubError2=${pubError2}","$2PLYTABTABTABTAB;;PLYTABTABTAB3)PLYTABTABTABTABpubError3=${pubError3}","$2PLYTABTABTABTAB;;PLYTABTABTAB0)PLYTABTABTABTABpubfinish=${pubfinish}","$2PLYTABTABTABTAB;;PLYTABTABesacPLYTABTABshiftspace2PLYTABdonePLYTAB#spacereturnspace$resultPLY}PLYPLY#确定新版本所在文件夹的名字.PLYsource2=${source%/}PLYfileName=${source2##/*/}PLYdirname=${fileName%%.*}PLYechospacenewspaceversionspacefilespacenamespaceis:$dirnamePLYPLY#创建版本备份与更新目录PLYifspace[space!space-zspace"$dirname"space];thenPLYTABifspace[space!space-dspace"/tmp/$(datespace+%m%d)"space]PLYTABthenPLYTABTABechospacemkdirspace/tmp/$(datespace+%m%d)/$dirnamePLYTABTABmkdirspace-pspace/tmp/$(datespace+%m%d)/$dirnamePLYTABelsePLYTABTABechospacedir:/tmp/$(datespace+%m%d)/$dirnamespaceexist,deletespaceit!PLYTABTABrmspace-rfspace/tmp/$(datespace+%m%d)/$dirname/*PLYTABfiPLYelsePLYTABechospace$sourcespacehavespaceerror!spacecheckspace!PLYTABexitspace1PLYfiPLYifspace[space!space-dspace"/home/$iuser/backup/bak_$(datespace+%F)"space]PLYthenPLYTABechospacemkdirspace/home/$iuser/backup/bak_$(datespace+%F)PLYTABmkdirspace/home/$iuser/backup/bak_$(datespace+%F)PLYelsePLYTABechospacedir:/home/$iuser/backup/bak_$(datespace+%F)spaceexist,deletespaceit!PLYTABrmspace-rfspace/home/$iuser/backup/bak_$(datespace+%F)/*PLYfiPLYPLY#解压新版本并把新版本放到指定目录:(datespace+%m%d)PLYifspace[space-fspace"$source"space]PLYthenPLYTABfilespace$sourcespace|spacegrepspace"Zipspacearchivespacedata"space>/dev/nullspace2>&1space&&space{PLYTABTABechospaceExtractingspace$sourcePLYTABTABunzipspace-ospace$sourcespace-dspace/tmp/$(datespace+%m%d)/$dirnamespace>/dev/nullspace&&spaceechospaceExtractspacefinish.PLYTAB}PLYfiPLYifspace[space-dspace"$source"space]PLYthenPLYTABechospace$sourcespace|spacegrepspace"/tmp/$(datespace+%m%d)"space>/dev/nullspace2>&1space||space{PLYTABTABechospacecpspace$dirnamespacetospace/tmp/$(datespace+%m%d)/$dirnamePLYTABTABcpspace-rspace${source%/}/*space/tmp/$(datespace+%m%d)/$dirnamespacespace&&spaceechospacecopyspacefinish.PLYTAB}PLYfiPLYPLY#开始版本备份与更新PLYpushdspace/tmp/$(datespace+%m%d)/$dirnamespace>/dev/nullPLYTABforspaceimodspaceinspace$(findspace.space-namespace"*_lib"space-typespacedspace|spaceawkspace-Fspace"/"space'{printspace$NF}'space|spaceawkspace-Fspace"_"space'{printspace$1}')PLYTABdoPLYTABTABmod_checkspace$imodPLYTABTABcasespace$?spaceinPLYTABTABTAB1)PLYTABTABTABTABmodError2=${modError1}","$imodPLYTABTABTABTAB;;PLYTABTABTAB0)PLYTABTABTABTABmodCheckOk=${modCheckOk}"space"$imodPLYTABTABTABTAB;;PLYTABTABesacPLYTABdonePLYTABforspaceipubspaceinspace$(findspace.space-namespace"*.war"space-typespacefspace|spaceawkspace-Fspace"/"space'{printspace$NF}'space|spaceawkspace-Fspace"."space'{printspace$1}')PLYTABdoPLYTABTABpubdirname=pub_errorPLYTABTABpub=$ipub;PLYTABTABcasespace$pubspaceinPLYTABTABTAB*live*control*)PLYTABTABTABTABpubdirname="livecontrol"PLYTABTABTABTAB;;PLYTABTABTAB*live*interface*)PLYTABTABTABTABpubdirname="liveinterface"PLYTABTABTABTAB;;PLYTABTABTAB*live*room*)PLYTABTABTABTABpubdirname="liveroom"PLYTABTABTABTAB;;PLYTABTABTAB*cmbc*interface*)PLYTABTABTABTABpubdirname="pub_cmbc_interface"PLYTABTABTABTAB;;PLYTABTABTAB*webmanager*)PLYTABTABTABTABpubdirname="webmanager"PLYTABTABTABTAB;;PLYTABTABesacPLYTABTABpub_checkspace$pubdirnamePLYTABTABcasespace$?spaceinPLYTABTABTAB1)PLYTABTABTABTABpubError1=${pubError1}","$pubPLYTABTABTABTAB;;PLYTABTABTAB0)PLYTABTABTABTABpubCheckOk=${pubCheckOk}"space"$pub"space"$pubdirnamePLYTABTABTABTAB;;PLYTABTABesacPLYTABdonePLYTABechospacecheckspaceresult:PLYTABifspace[space!space-zspace"$modError1"space];thenPLYTABTABechospacemodspacenamespaceerror:$modError1PLYTABfiPLYTABifspace[space!space-zspace"$pubError1"space];thenPLYTABTABechospacepubspacenamespaceerror:$pubError1PLYTABfiPLYTABifspace[space!space-zspace"$modCheckOk"space];thenPLYTABTABechospacemodspacenamespaceok:$modCheckOkPLYTABfiPLYTABifspace[space!space-zspace"$pubCheckOk"space];thenPLYTABTABechospacepubspacenamespaceok:$pubCheckOkPLYTABfiPLYTABprintfspace"pleasespaceconfirmspacethespaceresultspaceandspaceenterspace(yes/no)spacetospacecontinue:"PLYTABreadspacexPLYTABifspace[space"X$x"space=space"Xyes"space];thenPLYTABTABechospaceOperationspacewillspacebeginningspaceimmediatelyPLYTABTABforspacesspaceinspace"5space4space3space2space1space0"PLYTABTABdoPLYTABTABTABechospace-nspace$sPLYTABTABTABsleepspace1PLYTABTABdonePLYTABTAB#spacerunspace$modCheckOkspace$pubCheckOkPLYTABelsePLYTABTABprintfspace"Arespaceyouspacewantspacetospacemodifyspacethespacemodspaceorspacepubspacelist?(yes/no)"PLYTABTABreadspaceiPLYTABTABifspace[space"X$i"space=space"Xyes"space];thenPLYTABTABTABprintfspace"changespacethespacemodulespacenamespacelistspace(yes/no)\?"PLYTABTABTABreadspaceyPLYTABTABTABifspace[space"X$y"space=space"Xyes"space];thenPLYTABTABTABTABechospaceenterspacethespacemodnamespacelist\(Separatedspacebyspacespaces\)\:PLYTABTABTABTABreadspacemodCheckOkPLYTABTABTABTAB#spaceaddspacecheckPLYTABTABTABfiPLYTABTABTABprintfspace"changespacethespacepublicspacenamespacelistspace(yes/no)\?"PLYTABTABTABreadspacezPLYTABTABTABifspace[space"X$z"space=space"Xyes"space];thenPLYTABTABTABTABechospaceenterspacethespacepubnamespacelist\(Separatedspacebyspacespaces\)\:PLYTABTABTABTABreadspacepubCheckOkPLYTABTABTABTAB#spaceaddspacecheckPLYTABTABTABfiPLYTABTABTABechospaceOperationspacewillspacebeginningspaceimmediatelyPLYTABTABTABforspacesspaceinspace"5space4space3space2space1space0"PLYTABTABTABdoPLYTABTABTABTABechospace-nspace$sPLYTABTABTABTABsleepspace1PLYTABTABTABdonePLYTABTABTAB#spacerunspace$modCheckOkspace$pubCheckOkPLYTABTABelsePLYTABTABTABechospaceGospacetospaceexit\;spacebyespacebye\!PLYTABTABTABexitspace1PLYTABTABfiPLYTABfiPLYpopdspace>/dev/nullPLYPLY#最后结果输出PLYechospace==========================================================PLY#spaceechospacemodspacetotalspaceis:${modsum},pubspacetotalspaceis:${pubsum}PLYifspace[space!space-zspace"$modError1"space];thenPLYTABechospacemodspacenamespaceerror:$modError1PLYfiPLYifspace[space!space-zspace"$modError2"space]PLYthenPLYTABechospacemodspacebackupspacefailedspacehave:$modError2PLYfispacePLYifspace[space!space-zspace"$modError3"space];thenPLYTABechospacemodspaceupdatespacefailedspacehave:$modError3PLYfispacePLYifspace[space!space-zspace"$pubError1"space];thenPLYTABechospacepubspacenamespaceerror:$pubError1PLYfiPLYifspace[space!space-zspace"$pubError2"space]PLYthenPLYTABechospacepubspacebackupspacefailedspacehave:$pubError2PLYfiPLYifspace[space!space-zspace"$pubError2"space];thenPLYTABechospacepubspaceupdatespacefailedspacehave:$pubError3PLYfiPLYechospacemod:${modfinish}spacefinish!PLYechospacepub:${pubfinish}spacefinish!PLYexit
+#!/bin/env bash
+# writer SY60216
+# 脚本功能：版本的备份与更新 须1个目标版本参数(绝对路径)
+# usage： 
+#			bash backupAndUpdate.sh "/sourcePath/(filename|dirname)"
+
+IFS=$' \t\n'
+source=$1
+iuser=$(whoami)
+echo user is:$iuser
+typeset -l mod;typeset -l pub;
+modError1="";pubError1="";modfinish="";pubfinish="";modCheckOk="";pubCheckOk="";
+modError2="";modError3="";modsum=0;pubsum=0;
+pubError2="";pubError3=""
+
+run(){
+	for m in $1
+	do
+		backupAndupdate_mod $m
+		case $? in
+			2)
+				modError2=${modError2}","$m
+				;;
+			3)
+				modError3=${modError3}","$m
+				;;
+			0)
+				modfinish=${modfinish}","$m
+				;;
+		esac
+	done
+	backupAndupdate_pub $(echo $2)
+}
+
+mod_check(){
+	if [ -d "/home/$iuser/innerapp/${1}" ];then
+		return 0
+	else
+		return 1
+	fi
+}
+pub_check(){
+	if [ -d "/home/$iuser/webhome/${1}" ];then
+		return 0
+	else
+		return 1
+	fi
+}
+
+backupAndupdate_mod(){
+	#依据mod_lib文件夹备份和更新mod版本
+	echo =======================${1}===============================
+	local result=0
+	echo start backup the module : $1
+	mkdir -p /home/$iuser/backup/bak_$(date +%F)/$1
+	find /home/$iuser/innerapp/ -name ${1}.jar | xargs -n1 -i -t mv -f {} /home/$iuser/backup/bak_$(date +%F)/${1}/ || result=2
+	find /home/$iuser/innerapp/ -name ${1}_lib -type d | xargs -n1 -i -t mv -f {} /home/$iuser/backup/bak_$(date +%F)/${1}/ || result=2
+	if [ $result -eq 0 ]
+	then
+		echo $1 backup success,now starting update...
+		find /tmp/$(date +%m%d)/$dirname/ -name ${1}.jar -type f | xargs -n1 -i -t cp {} /home/$iuser/innerapp/${1}/ || result=3
+		find /tmp/$(date +%m%d)/$dirname/ -name ${1}_lib -type d | xargs -n1 -i -t cp -r {} /home/$iuser/innerapp/${1}/ || result=3
+		if [ $result -eq 0 ]
+		then
+			echo $1 update success!
+		fi
+	else
+		echo $1 backup failed!
+	fi
+	return $result
+}
+
+backupAndupdate_pub(){
+	#根据war包,备份与更新订阅号平台
+	while test $# -gt 1
+	do
+		echo =======================${1}===============================
+		local result=0
+		if [ "X$2" = "Xwebmanager" ];then
+			echo backup webmanager config files.
+			pushd /home/$iuser/webhome/$2 >/dev/null
+				zip -q ../webmanagerConf.zip ./dbconfiglogger.properties ./dbconfig.properties ./webmgr.properties ./WEB-INF/classes/dbconfig.properties ./WEB-INF/classes/config/spring.xml
+			popd >/dev/null
+			echo backup finish.
+		fi
+		echo start backup the pub : $2
+		find /home/$iuser/webhome/ -maxdepth 1 -name ${2} -type d 2>/dev/null | xargs -n1 -i -t mv -f {} /home/$iuser/backup/bak_$(date +%F)/ || result=2
+		if [ $result -eq 0 ]
+		then
+			echo $1 backup success,now starting update...
+			find /tmp/$(date +%m%d)/$dirname/ -name "${1}.*war" -type f | xargs -n1 -i -t unzip -o {} -d /home/$iuser/webhome/$2/ >/dev/null || result=3
+			find /tmp/$(date +%m%d)/$dirname/ -name "${1}.*war" -type f | xargs -n1 -i -t cp {} /home/$iuser/webhome/${2}/
+			if [ $result -eq 0 ]
+			then
+				if [ "X$2" = "Xwebmanager" ];then
+					echo update webmanager config files.
+					pushd /home/$iuser/webhome/$2 >/dev/null
+						unzip -q -o ../webmanagerConf.zip -d .
+					popd >/dev/null
+					echo update finish.
+				fi
+				echo $1 update success!
+			fi
+		else
+			echo $1 backup failed!
+		fi
+		case $result in
+			2)
+				pubError2=${pubError2}","$2
+				;;
+			3)
+				pubError3=${pubError3}","$2
+				;;
+			0)
+				pubfinish=${pubfinish}","$2
+				;;
+		esac
+		shift 2
+	done
+	# return $result
+}
+
+#确定新版本所在文件夹的名字.
+source2=${source%/}
+fileName=${source2##/*/}
+dirname=${fileName%%.*}
+echo new version file name is:$dirname
+
+#创建版本备份与更新目录
+if [ ! -z "$dirname" ];then
+	if [ ! -d "/tmp/$(date +%m%d)" ]
+	then
+		echo mkdir /tmp/$(date +%m%d)/$dirname
+		mkdir -p /tmp/$(date +%m%d)/$dirname
+	else
+		echo dir:/tmp/$(date +%m%d)/$dirname exist,delete it!
+		rm -rf /tmp/$(date +%m%d)/$dirname/*
+	fi
+else
+	echo $source have error! check !
+	exit 1
+fi
+if [ ! -d "/home/$iuser/backup/bak_$(date +%F)" ]
+then
+	echo mkdir /home/$iuser/backup/bak_$(date +%F)
+	mkdir /home/$iuser/backup/bak_$(date +%F)
+else
+	echo dir:/home/$iuser/backup/bak_$(date +%F) exist,delete it!
+	rm -rf /home/$iuser/backup/bak_$(date +%F)/*
+fi
+
+#解压新版本并把新版本放到指定目录:(date +%m%d)
+if [ -f "$source" ]
+then
+	file $source | grep "Zip archive data" >/dev/null 2>&1 && {
+		echo Extracting $source
+		unzip -o $source -d /tmp/$(date +%m%d)/$dirname >/dev/null && echo Extract finish.
+	}
+fi
+if [ -d "$source" ]
+then
+	echo $source | grep "/tmp/$(date +%m%d)" >/dev/null 2>&1 || {
+		echo cp $dirname to /tmp/$(date +%m%d)/$dirname
+		cp -r ${source%/}/* /tmp/$(date +%m%d)/$dirname  && echo copy finish.
+	}
+fi
+
+#开始版本备份与更新
+pushd /tmp/$(date +%m%d)/$dirname >/dev/null
+	for imod in $(find . -name "*_lib" -type d | awk -F "/" '{print $NF}' | awk -F "_" '{print $1}')
+	do
+		mod_check $imod
+		case $? in
+			1)
+				modError2=${modError1}","$imod
+				;;
+			0)
+				modCheckOk=${modCheckOk}" "$imod
+				;;
+		esac
+	done
+	for ipub in $(find . -name "*.war" -type f | awk -F "/" '{print $NF}' | awk -F "." '{print $1}')
+	do
+		pubdirname=pub_error
+		pub=$ipub;
+		case $pub in
+			*live*control*)
+				pubdirname="livecontrol"
+				;;
+			*live*interface*)
+				pubdirname="liveinterface"
+				;;
+			*live*room*)
+				pubdirname="liveroom"
+				;;
+			*cmbc*interface*)
+				pubdirname="pub_cmbc_interface"
+				;;
+			*webmanager*)
+				pubdirname="webmanager"
+				;;
+		esac
+		pub_check $pubdirname
+		case $? in
+			1)
+				pubError1=${pubError1}","$pub
+				;;
+			0)
+				pubCheckOk=${pubCheckOk}" "$pub" "$pubdirname
+				;;
+		esac
+	done
+	echo check result:
+	if [ ! -z "$modError1" ];then
+		echo mod name error:$modError1
+	fi
+	if [ ! -z "$pubError1" ];then
+		echo pub name error:$pubError1
+	fi
+	if [ ! -z "$modCheckOk" ];then
+		echo mod name ok:$modCheckOk
+	fi
+	if [ ! -z "$pubCheckOk" ];then
+		echo pub name ok:$pubCheckOk
+	fi
+	printf "please confirm the result and enter (yes/no) to continue:"
+	read x
+	if [ "X$x" = "Xyes" ];then
+		echo Operation will beginning immediately
+		for s in "5 4 3 2 1 0"
+		do
+			echo -n $s
+			sleep 1
+		done
+		# run $modCheckOk $pubCheckOk
+	else
+		printf "Are you want to modify the mod or pub list?(yes/no)"
+		read i
+		if [ "X$i" = "Xyes" ];then
+			printf "change the module name list (yes/no)\?"
+			read y
+			if [ "X$y" = "Xyes" ];then
+				echo enter the modname list\(Separated by  s\)\:
+				read modCheckOk
+				# add check
+			fi
+			printf "change the public name list (yes/no)\?"
+			read z
+			if [ "X$z" = "Xyes" ];then
+				echo enter the pubname list\(Separated by  s\)\:
+				read pubCheckOk
+				# add check
+			fi
+			echo Operation will beginning immediately
+			for s in "5 4 3 2 1 0"
+			do
+				echo -n $s
+				sleep 1
+			done
+			# run $modCheckOk $pubCheckOk
+		else
+			echo Go to exit\; bye bye\!
+			exit 1
+		fi
+	fi
+popd >/dev/null
+
+#最后结果输出
+echo ==========================================================
+# echo mod total is:${modsum},pub total is:${pubsum}
+if [ ! -z "$modError1" ];then
+	echo mod name error:$modError1
+fi
+if [ ! -z "$modError2" ]
+then
+	echo mod backup failed have:$modError2
+fi 
+if [ ! -z "$modError3" ];then
+	echo mod update failed have:$modError3
+fi 
+if [ ! -z "$pubError1" ];then
+	echo pub name error:$pubError1
+fi
+if [ ! -z "$pubError2" ]
+then
+	echo pub backup failed have:$pubError2
+fi
+if [ ! -z "$pubError2" ];then
+	echo pub update failed have:$pubError3
+fi
+echo mod:${modfinish} finish!
+echo pub:${pubfinish} finish!
+exit
