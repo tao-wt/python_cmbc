@@ -12,9 +12,17 @@ typeset -l mod;typeset -l pub;
 modError1="";pubError1="";modfinish="";pubfinish="";modCheckOk="";pubCheckOk="";
 modError2="";modError3="";modsum=0;pubsum=0;
 pubError2="";pubError3=""
-list="5 4 3 2 1"
 
 run(){
+	local list="5 4 3 2 1"
+	echo waitting
+	for s in $list
+	do
+		printf "***%s***" $s
+		sleep 1s
+		printf "\b\b\b\b\b\b\b"
+	done
+	echo beginning
 	for m in $1
 	do
 		backupAndupdate_mod $m
@@ -227,14 +235,7 @@ pushd /tmp/$(date +%m%d)/$dirname >/dev/null
 	printf "Please confirm the result and enter (yes/no) to continue:"
 	read x
 	if [ "X$x" = "Xyes" ];then
-		echo Operation will beginning immediately
-		for s in $list
-		do
-			printf "***%s***" $i
-			sleep 1s
-			printf "\b\b\b\b\b\b\b"
-		done
-		# run $modCheckOk $pubCheckOk
+		run $modCheckOk $pubCheckOk
 	else
 		printf "Are you want to modify the mod or pub list?(yes/no)"
 		read i
@@ -253,14 +254,7 @@ pushd /tmp/$(date +%m%d)/$dirname >/dev/null
 				read pubCheckOk
 				# add check
 			fi
-			echo Operation will beginning immediately
-			for s in $list
-			do
-				printf "***%s***" $i
-				sleep 1s
-				printf "\b\b\b\b\b\b\b"
-			done
-			# run $modCheckOk $pubCheckOk
+			run $modCheckOk $pubCheckOk
 		else
 			echo Go to exit\; bye bye\!
 			exit 1
