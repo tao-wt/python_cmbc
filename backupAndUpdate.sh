@@ -12,6 +12,7 @@ typeset -l mod;typeset -l pub;
 modError1="";pubError1="";modfinish="";pubfinish="";modCheckOk="";pubCheckOk="";
 modError2="";modError3="";modsum=0;pubsum=0;
 pubError2="";pubError3=""
+list="5 4 3 2 1"
 
 run(){
 	for m in $1
@@ -223,39 +224,41 @@ pushd /tmp/$(date +%m%d)/$dirname >/dev/null
 	if [ ! -z "$pubCheckOk" ];then
 		echo pub name ok:$pubCheckOk
 	fi
-	printf "please confirm the result and enter (yes/no) to continue:"
+	printf "Please confirm the result and enter (yes/no) to continue:"
 	read x
 	if [ "X$x" = "Xyes" ];then
 		echo Operation will beginning immediately
-		for s in "5 4 3 2 1 0"
+		for s in $list
 		do
-			echo -n $s
-			sleep 1
+			printf "***%s***" $i
+			sleep 1s
+			printf "\b\b\b\b\b\b\b"
 		done
 		# run $modCheckOk $pubCheckOk
 	else
 		printf "Are you want to modify the mod or pub list?(yes/no)"
 		read i
 		if [ "X$i" = "Xyes" ];then
-			printf "change the module name list (yes/no)\?"
+			printf "Change the module name list (yes/no)\?"
 			read y
 			if [ "X$y" = "Xyes" ];then
-				echo enter the modname list\(Separated by  s\)\:
+				echo Enter the modname list\(Separated by  s\)\:
 				read modCheckOk
 				# add check
 			fi
-			printf "change the public name list (yes/no)\?"
+			printf "Change the public name list (yes/no)\?"
 			read z
 			if [ "X$z" = "Xyes" ];then
-				echo enter the pubname list\(Separated by  s\)\:
+				echo Enter the pubname list\(Separated by  s\)\:
 				read pubCheckOk
 				# add check
 			fi
 			echo Operation will beginning immediately
-			for s in "5 4 3 2 1 0"
+			for s in $list
 			do
-				echo -n $s
-				sleep 1
+				printf "***%s***" $i
+				sleep 1s
+				printf "\b\b\b\b\b\b\b"
 			done
 			# run $modCheckOk $pubCheckOk
 		else
