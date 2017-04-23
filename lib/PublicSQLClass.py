@@ -1,1 +1,85 @@
-#!/usr/bin/envspacepythonPLY#spaceencoding:utf-8PLY__author__space=space'Chocolee'PLYfromspaceSqliteClassspaceimportspace*PLYPLYclassspaceSQLClass(object):PLYspacespacespacespacesspace=spaceSqliteClass('../conf/tsck.db')PLYPLYspacespacespacespacedefspacefindUserPass(self,user):PLYspacespacespacespacespacespacespacespacesqlspace=space"selectspaceport,passwordspacefromspaceuserspacewherespaceuser='%s'"space%userPLYspacespacespacespacespacespacespacespacereturnspaceself.s.queryAll(sql)PLYPLYspacespacespacespacedefspacefindAllHosts(self):PLYspacespacespacespacespacespacespacespacesqlspace=space"selectspacedistinctspaceipspacefromspacepublic"PLYspacespacespacespacespacespacespacespacereturnspaceself.s.queryAll(sql)PLYPLYspacespacespacespacedefspacefindALLInfo(self):PLYspacespacespacespacespacespacespacespacesqlspace=space"selectspaceip,publicname,publicpath,cpnamespacefromspacepublic"PLYspacespacespacespacespacespacespacespacereturnspaceself.s.queryAll(sql)PLYPLYspacespacespacespacedefspacefindAllPubName(self):PLYspacespacespacespacespacespacespacespacesqlspace=space"selectspacedistinctspacepublicnamespacefromspacepublic"PLYspacespacespacespacespacespacespacespacereturnspaceself.s.queryAll(sql)PLYPLYspacespacespacespacedefspacefindIpModInfo(self,ip,modname):PLYspacespacespacespacespacespacespacespacesqlspace=space"selectspaceip,publicname,publicpath,cpnamespacefromspacepublicspace"space\PLYspacespacespacespacespacespacespacespacespacespacespacespacespacespace"wherespaceipspace=space'%s'spaceandspacepublicnamespace=space'%s'"space%(ip,modname)PLYspacespacespacespacespacespacespacespacereturnspaceself.s.queryAll(sql)PLYPLYspacespacespacespacedefspacefindIPInfo(self,modname,cpname):PLYspacespacespacespacespacespacespacespacesqlspace=space"selectspaceip,publicname,publicpath,cpnamespacefromspacepublicspacewherespacepublicnamespace=space'%s'%s"space%(modname,cpname)PLYspacespacespacespacespacespacespacespacereturnspaceself.s.queryAll(sql)PLYPLYspacespacespacespacedefspacefindPublicTable(self):PLYspacespacespacespacespacespacespacespacesqlspace=space'selectspace*spacefromspacepublic;'PLYspacespacespacespacespacespacespacespacereturnspaceself.s.queryAll(sql)PLYPLYspacespacespacespacedefspacefindHosts(self):PLYspacespacespacespacespacespacespacespacesql='selectspacedistinctspaceip,hostnamespacefromspacepublic;'PLYspacespacespacespacespacespacespacespacereturnspaceself.s.queryAll(sql)PLYPLYspacespacespacespacedefspacefindModByIP(self,host):PLYspacespacespacespacespacespacespacespacesqlspace=space"selectspaceip,publicname,startcmd,port,CPnamespacefromspacePUBLICspacewherespaceipspace=space'%s';"space%hostPLYspacespacespacespacespacespacespacespacereturnspaceself.s.queryAll(sql)PLYPLYspacespacespacespacedefspacefindModName(self):PLYspacespacespacespacespacespacespacespacesqlspace=space"selectspacedistinctspacepublicnamespacefromspacepublic;"PLYspacespacespacespacespacespacespacespacereturnspaceself.s.queryAll(sql)PLYPLYspacespacespacespacedefspacefindIPByModName(self,publicname):PLYspacespacespacespacespacespacespacespacesqlspace=space"selectspacedistinctspaceipspacefromspacepublicspacewherespacepublicnamespace=space'%s';"space%publicnamePLYspacespacespacespacespacespacespacespacereturnspaceself.s.queryAll(sql)PLYPLYspacespacespacespacedefspacefindModByModName(self,publicname,cpname):PLYspacespacespacespacespacespacespacespacesqlspace=space"selectspaceip,publicname,startcmd,port,CPnamespacefromspacepublicspacewherespacepublicnamespace=space'%s'%s;"space%(publicname,cpname)PLYspacespacespacespacespacespacespacespacereturnspaceself.s.queryAll(sql)PLYPLYspacespacespacespacedefspacefindModByModAndIP(self,host,publicname):PLYspacespacespacespacespacespacespacespacesqlspace=space"selectspaceip,publicname,startcmd,port,CPnamespacefromspacepublicspacewherespaceipspace=space'%s'spaceandspacepublicnamespace=space'%s';"space%(host,publicname)PLYspacespacespacespacespacespacespacespacereturnspaceself.s.queryAll(sql)PLYPLYspacespacespacespacedefspacesendFileInfo(self):PLYspacespacespacespacespacespacespacespacesqlspace=space'selectspaceip,modulename,path,CPnamespacefromspacemodule;'PLYspacespacespacespacespacespacespacespacereturnspaceself.s.queryAll(sql)PLYPLYspacespacespacespacedefspacefindAllIp(self):PLYspacespacespacespacespacespacespacespacesqlspace=space'selectspacespacedistinctspaceipspacefromspacepublic;'PLYspacespacespacespacespacespacespacespacereturnspaceself.s.queryAll(sql)PLYPLYspacespacespacespacedefspacefindIpcmd(self,ip):PLYspacespacespacespacespacespacespacespacesqlspace=space"selectspaceip,startcmdspacefromspacepublicspacewherespaceipspace=space'%s';"space%ipPLYspacespacespacespacespacespacespacespacereturnspaceself.s.queryAll(sql)PLYPLYspacespacespacespacedefspacefindIpname(self,ip):PLYspacespacespacespacespacespacespacespacesqlspace=space"selectspaceip,publicnamespacefromspacepublicspacewherespaceipspace=space'%s';"space%ipPLYspacespacespacespacespacespacespacespacereturnspaceself.s.queryAll(sql)PLYPLYspacespacespacespacedefspacefindIpAndMod(self,ip,mod):PLYspacespacespacespacespacespacespacespacesqlspace=space"selectspaceip,startcmdspacefromspacepublicspacewherespaceipspace=space'%s'spaceandspacepublicnamespace=space'%s';"space%(ip,mod)PLYspacespacespacespacespacespacespacespacereturnspaceself.s.queryAll(sql)PLYPLYspacespacespacespacedefspacefindIpOnlyMod(self,mod,cpname):PLYspacespacespacespacespacespacespacespacesqlspace=space"selectspaceip,startcmdspacefromspacepublicspacewherespacepublicnamespace=space'%s'%s;"space%(mod,cpname)PLYspacespacespacespacespacespacespacespacereturnspaceself.s.queryAll(sql)PLY
+#!/usr/bin/env python
+# encoding:utf-8
+__author__ = 'Chocolee'
+from SqliteClass import *
+
+class SQLClass(object):
+    s = SqliteClass('../conf/tsck.db')
+
+    def findUserPass(self,user):
+        sql = "select port,password from user where user='%s'" %user
+        return self.s.queryAll(sql)
+
+    def findAllHosts(self):
+        sql = "select distinct ip from public"
+        return self.s.queryAll(sql)
+
+    def findALLInfo(self):
+        sql = "select ip,publicname,publicpath,cpname from public"
+        return self.s.queryAll(sql)
+
+    def findAllPubName(self):
+        sql = "select distinct publicname from public"
+        return self.s.queryAll(sql)
+
+    def findIpModInfo(self,ip,modname):
+        sql = "select ip,publicname,publicpath,cpname from public " \
+              "where ip = '%s' and publicname = '%s'" %(ip,modname)
+        return self.s.queryAll(sql)
+
+    def findIPInfo(self,modname,cpname):
+        sql = "select ip,publicname,publicpath,cpname from public where publicname = '%s'%s" %(modname,cpname)
+        return self.s.queryAll(sql)
+
+    def findPublicTable(self):
+        sql = 'select * from public;'
+        return self.s.queryAll(sql)
+
+    def findHosts(self):
+        sql='select distinct ip,hostname from public;'
+        return self.s.queryAll(sql)
+
+    def findModByIP(self,host):
+        sql = "select ip,publicname,startcmd,port,CPname from PUBLIC where ip = '%s';" %host
+        return self.s.queryAll(sql)
+
+    def findModName(self):
+        sql = "select distinct publicname from public;"
+        return self.s.queryAll(sql)
+
+    def findIPByModName(self,publicname):
+        sql = "select distinct ip from public where publicname = '%s';" %publicname
+        return self.s.queryAll(sql)
+
+    def findModByModName(self,publicname,cpname):
+        sql = "select ip,publicname,startcmd,port,CPname from public where publicname = '%s'%s;" %(publicname,cpname)
+        return self.s.queryAll(sql)
+
+    def findModByModAndIP(self,host,publicname):
+        sql = "select ip,publicname,startcmd,port,CPname from public where ip = '%s' and publicname = '%s';" %(host,publicname)
+        return self.s.queryAll(sql)
+
+    def sendFileInfo(self):
+        sql = 'select ip,modulename,path,CPname from module;'
+        return self.s.queryAll(sql)
+
+    def findAllIp(self):
+        sql = 'select  distinct ip from public;'
+        return self.s.queryAll(sql)
+
+    def findIpcmd(self,ip):
+        sql = "select ip,startcmd from public where ip = '%s';" %ip
+        return self.s.queryAll(sql)
+
+    def findIpname(self,ip):
+        sql = "select ip,publicname from public where ip = '%s';" %ip
+        return self.s.queryAll(sql)
+
+    def findIpAndMod(self,ip,mod):
+        sql = "select ip,startcmd from public where ip = '%s' and publicname = '%s';" %(ip,mod)
+        return self.s.queryAll(sql)
+
+    def findIpOnlyMod(self,mod,cpname):
+        sql = "select ip,startcmd from public where publicname = '%s'%s;" %(mod,cpname)
+        return self.s.queryAll(sql)
+

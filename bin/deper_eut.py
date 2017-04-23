@@ -1,1 +1,267 @@
-#!/usr/bin/envspacepythonPLY#spaceencoding:utf-8PLY__author__space=space'Chocolee'PLYimportspacesysPLYsys.path.append("..")PLYfromspacelib.LogicSQLClassspaceimportspace*PLYfromspacelib.ParamikoClassspaceimportspace*PLYfromspaceoptparsespaceimportspaceOptionParserPLYimportspacemultiprocessingPLYimportspacerePLYPLYtspace=spaceSQLClass()PLY#申明使用哪个用户操作远程设备PLYuseUserspace=space'zhuser'PLYappSourcePathspace=space'/home/zhuser/innerapp'PLYprocessNum=10PLYuserInfospace=spacet.findUserPass(useUser)PLYforspaceispaceinspaceuserInfo:PLYTABuserspace=spacei[0]PLYTABportspace=spacei[1]PLYTABpasswdspace=spacei[2]PLYPLYdefspacecheck_Ip(ip):PLYTABhostsspace=space[]PLYTABhosts_okspace=space[]PLYTABiphostspace=spacet.findHosts()PLYTABforspacehspaceinspaceiphost:PLYTABTABhosts.append(str(h[0]))PLYTABipspace=space{}.fromkeys(ip).keys()PLYTABforspaceispaceinspaceip:PLYTABTABifspaceispacenotspaceinspacehosts:PLYTABTABTABprintspace"\033[1;31;40m%sspacenotspaceexist,pleasespacecheck!\033[0m"space%iPLYTABTABTAB#continuePLYTABTABTABsys.exit(3)PLYPLYdefspacecheck_ModName(mod):PLYTABmodnamesspace=space[]PLYTABmodulenamespace=spacet.findModName()PLYTABforspacemspaceinspacemodulename:PLYTABTABmodnames.append(str(m[0]))PLYTABforspacemnspaceinspacemod:PLYTABTABifspacemnspacenotspaceinspacemodnames:PLYTABTABTABprintspace"\033[1;31;40mModNamespace%sspacenotspaceexist,pleasespacecheck!\033[0m"space%mnPLYTABTABTABprintspace30*'*'PLYTABTABTABprintspace"\033[1;33;40mInputspaceReferencespaceModName:\033[0m"spacePLYTABTABTABforspacemspaceinspacemodnames:PLYTABTABTABTABprintspace"\033[1;33;40m%s\033[0m"space%m,PLYTABTABTABsys.exit(3)PLYPLY#创建程序目录PLYdefspacemkWebappDir(host):PLYTABpspace=spaceParamikoClass(host,port,user,passwd)PLYTABp.cmd_run('mkdirspace-pspace/opt/innerapp')PLYPLYdefspacemkSupDir(host):PLYTABpspace=spaceParamikoClass(host,port,user,passwd)PLYTABp.cmd_run('mkdirspace-pspace/opt/supervise')PLYPLY#帮助信息PLYdefspacehelpFunc(a,b,c,d):PLYTABprintspace"USAGE:"PLYTABprintspace"-hspaceorspace--helpspaceforspacehelp."PLYTABprintspace"-Mspaceorspace--modulespaceforspacemodulename,canspaceusespace','spaceexample:acp,cmp,nav."PLYTABprintspace"-ispaceorspace--ipspaceforspaceipspaceaddress,canspaceusespace','spaceexample:192.168.199.11,10.10.10.10."PLYTABprintspace"-aspaceorspace--allspaceforspaceallspaceipspaceaddress,listspaceofspacedb."PLYTABprintspace"-Dspaceorspace--deployappspaceforspacedeployspaceallspaceapp,usespacethisspaceoptionspacemustspacebespacecareful!"PLYTABprintspace"-nspaceorspace--numberspaceforspaceCPname."PLYTABprintspace"EXAMPLE:space'pythonspace%sspace-ispace10.10.10.10space-Mspaceacp'"space%sys.argv[0]PLYTABsys.exit(3)PLYPLY#远程推送配置文件PLYdefspacesendAndConf(infoList):PLYTABhostspace=spaceinfoList[0]PLYTABmnamespace=spaceinfoList[1]PLYTABpathspace=spaceinfoList[2]PLYTABcpnamespace=spaceinfoList[3]PLYTABtmpspace=spacepath.split('/')PLYTABfilenamespace=spacetmp[-1]PLYTABdjob_numberspace=spacepath.split('_')[-1]PLYTABpspace=spaceParamikoClass(host,port,user,passwd)PLYTABlocal_dirspace=space'%s/%s/'space%(appSourcePath,mname)PLYTABremote_dirspace=space'%s/'space%pathPLYTABdircmd=space"rmspace-rfspace%s%s*"%(remote_dir,mname)PLYTABp.cmd_run(dircmd)PLYTABp.upload(local_dir,remote_dir)PLYTABifspacemname=="djob":PLYTABTABcmdspace=space"sedspace-ispace'/ComputerName/spaces#CP01#%s#g'space%s/servicesetting.properties;sedspace-ispace's/^\(org.quartz.scheduler.instanceId:\).*/\\1instance_%s/'space%s/quartz.properties"space%(cpname,path,djob_number,path)PLYTABelse:PLYTABTABcmdspace=space"sedspace-ispace'/ComputerName/spaces#CP01#%s#g'space%s/servicesetting.properties"space%(cpname,path)PLYTABp.cmd_run(cmd)PLYTABcmdspace=space"cdspace%s;mvspace%s.jarspace%s.jar"space%(path,mname,filename)PLYTABp.cmd_run(cmd)PLYTABprint('%sspace:uploadspace%sspace\033[1;32;40mOK\033[0m'%(host,filename))PLYPLYdefspacemkdirWebapp():PLYTABpoolspace=spacemultiprocessing.Pool(processes=processNum)PLYTABhostlistspace=spacet.findHosts()PLYTABforspaceispaceinspacehostlist:PLYTABTABpool.apply_async(mkWebappDir,(i[0],))PLYTABpool.close()PLYTABpool.join()PLYPLY#部署模块PLYdefspacedeployRun():PLYTABpoolspace=spacemultiprocessing.Pool(processes=processNum)PLYTABlistinfospace=spacet.sendFileInfo()PLYTABforspaceispaceinspacelistinfo:PLYTABTABpool.apply_async(sendAndConf,(i,))PLYTABpool.close()PLYTABpool.join()PLYPLY#申明帮助参数属性PLYparserspace=spaceOptionParser(add_help_option=0)PLYparser.add_option("-h",space"--help",spaceaction="callback",spacecallback=helpFunc)PLYparser.add_option("-M",space"--module",spaceaction="store",spacetype="string",spacedest="module",default="")PLYparser.add_option("-m",space"--mid",spaceaction="store",spacetype="string",spacedest="mid",default="")PLYparser.add_option("-i",space"--ip",spaceaction="store",spacetype="string",spacedest="ip",default="")PLYparser.add_option("-a",space"--all",spaceaction="store_true",spacedest="all")PLYparser.add_option("-D",space"--deployapp",spaceaction="store_true",spacedest="deployapp")PLYparser.add_option("-n",space"--number",spaceaction="store",spacetype="string",spacedest="number",default="")PLYparser.add_option("-C",space"--changefile",spaceaction="store",spacetype="string",spacedest="cfilename",default="")PLY(options,spaceargs)space=spaceparser.parse_args()PLYipspace=spaceoptions.ip.split(',')PLYmodspace=spaceoptions.module.split(',')PLYmid=options.midPLYallipspace=spaceoptions.allPLYdeployappspace=spaceoptions.deployappPLYorder=options.number.split(',')PLYcfilenamespace=spaceoptions.cfilenamePLYcommandoption=argsPLYPLYdefspacemultipoolcess(infolist):PLYTABpoolspace=spacemultiprocessing.Pool(processes=processNum)PLYTABmodlenspace=spacespacelen(infolist)PLYTABcountspace=spacemodlen/2PLYTABlinfospace=spacemodlen%2PLYTABifspacelinfospace!=space0:PLYTABTABcountspace=spacecount+1PLYTABifspacemidspace==space"head":PLYTABTABispace=space0PLYTABTABwhilespaceispace<spacecount:PLYTABTABTABpool.apply_async(sendAndConf,(infolist[i],))PLYTABTABTABispace=spacei+1PLYTABelifspacemidspace==space"tail":PLYTABTABispace=spacecountPLYTABTABwhilespaceispace<spacemodlen:PLYTABTABTABpool.apply_async(sendAndConf,(infolist[i],))PLYTABTABTABispace=spacei+1PLYTABelse:TABTABPLYTABTABforspaceispaceinspaceinfolist:PLYTABTABTABpool.apply_async(sendAndConf,(i,))PLYTABpool.close()PLYTABpool.join()PLYPLYifspace__name__space==space'__main__':PLYTABifspacelen(sys.argv)space==space1:PLYTABTABhelpFunc('a','b','c','d')PLYTAB#获取模块列表和ip列表PLYTABmodulelistspace=space[]PLYTABiplistspace=space[]PLYTABtmpspace=spacet.findModName()PLYTABforspaceispaceinspacetmp:PLYTABTABmodulelist.append(str(i[0]))PLYTABtmpspace=spacet.findHosts()PLYTABforspaceispaceinspacetmp:PLYTABTABiplist.append(str(i[0]))PLYTABifspaceipspace!=space['']:PLYTABTABcheck_Ip(ip)PLYTABifspacemodspace!=space['']:PLYTABTABcheck_ModName(mod)PLYTABifspaceorderspace!=space['']:PLYTABTABallipspace=spaceTruePLYTABTABorder_newspace=spaceorderPLYTABTABorderspace=space['']PLYTABTABforspacei,jspaceinspaceenumerate(order_new):PLYTABTABTABjspace=spacere.sub(r'[a-zA-Z]*',"",j,0)PLYTABTABTABifspacej.find("-",0,len(j))space!=space-1:PLYTABTABTABTAB#spacejspace=spacej.upper().replace("CP","")PLYTABTABTABTABoj=j.split('-')PLYTABTABTABTABforspaceiobjspaceinspacerange(int(oj[0]),int(oj[1])+1):PLYTABTABTABTABTABorder.append("CP%s"%iobj)PLYTABTABTABelse:PLYTABTABTABTABorder.append("CP%s"%j)PLYTABTABTABTAB#spaceorder.append(order_new[i].upper())PLYTABifspacemidspace!=space"":PLYTABTABifspacemidspace!=space"head"spaceandspacemidspace!=space"tail":PLYTABTABTABprintspace"\033[1;31;40mmidspacenotspacecorrect,pleasespacecheck!\033[0m"PLYTABTABTABsys.exit(3)PLYTABTABelse:PLYTABTABTABallipspace=spaceTruePLYTABifspacelen(mod)space!=space1spaceandspaceorderspace!=space['']:PLYTABTABprintspace"\033[1;31;40morderspaceandspaceseveralspacemodulesspacecannotspaceusespacetogether,pleasespacemodify!\033[0m"PLYTABTABsys.exit(3)PLYTABifspacelen(mod)space!=space1spaceandspacemidspace!=space"":PLYTABTABprintspace"\033[1;31;40mmidspaceandspaceseveralspacemodulesspacecannotspaceusespacetogether,pleasespacemodify!\033[0m"PLYTABTABsys.exit(3)PLYTABifspaceipspace!=space['']spaceandspacemidspace!=space"":PLYTABTABprintspace"\033[1;31;40mmidspaceandspaceipspacecannotspaceusespacetogether,pleasespacemodify!\033[0m"PLYTABTABsys.exit(3)PLYTABifspaceorderspace!=space['']spaceandspacemidspace!=space"":PLYTABTABprintspace"\033[1;31;40mmidspaceandspaceorderspacenumberspacecannotspaceusespacetogether,pleasespacemodify!\033[0m"PLYTABTABsys.exit(3)PLYTABifspaceorderspace!=space['']spaceandspaceipspace!=space['']:PLYTABTABprintspace"\033[1;31;40mipspaceandspaceorderspacenumberspacecannotspaceusespacetogether,pleasespacemodify!\033[0m"PLYTABTABsys.exit(3)PLYTABPLY#判断输入的ip及模块名称是否合法，是否存在在配置文件中。PLYTABifspacemodspace!=space['']spaceandspaceipspace!=space['']:PLYTABTABtmplistspace=space[]PLYTABTABinfolistspace=space[]PLYTABTABforspaceispaceinspacemod:PLYTABTABTABforspacenspaceinspaceip:PLYTABTABTABTABtmplist.append(t.findIpModInfo(n,i))PLYTABTABwhilespace[]spaceinspacetmplist:PLYTABTABTABtmplist.remove([])PLYTABTABforspaceispaceinspacetmplist:PLYTABTABTABforspacenspaceinspacei:PLYTABTABTABTABinfolist.append(n)PLYTABTABifspaceinfolistspace!=space[]:PLYTABTABTABmultipoolcess(infolist)PLYTABTABelse:PLYTABTABTABprint('Error!pleasespacecheckspacedbspacefile!!')PLY#对模块进行批量部署，更新模块也是这一判断PLYTABelifspacemodspace!=space['']spaceandspaceallipspace==spaceTrue:PLYTABTABorderStrspace=space""PLYTABTABifspaceorderspace!=space['']:PLYTABTABTABorderStrspace=space"spaceandspace("PLYTABTABTABforspacenspaceinspaceorder:PLYTABTABTABTABorderStrspace=spaceorderStrspace+space"CPname='%s'spaceorspace"%nPLYTABTABTABorderStrspace=spacere.sub(r'spaceorspace$',"",orderStr,0)space+space")"PLYTABTABtmplistspace=space[]PLYTABTABinfolistspace=space[]PLYTABTABforspaceispaceinspacemod:PLYTABTABTABtmplist.append(t.findIPInfo(i,orderStr))PLYTABTABforspaceispaceinspacetmplist:PLYTABTABTABforspacenspaceinspacei:PLYTABTABTABTABinfolist.append(n)PLYTABTABifspaceinfolistspace!=space[]:PLYTABTABTABmultipoolcess(infolist)PLYTABTABelse:PLYTABTABTABprint('Error!pleasespacecheckspacedbspacefile!!')PLYTABelifspacecfilenamespace!=space['']:PLYTABTABAllIpPath=t.FindAllIpPath()PLYTABTABtheIp=AllIpPath[1][1]PLYTABTABCpspace=spaceParamikoClass(theIp,port,user,passwd)PLYTABTABforspaceispaceinspaceAllIpPath:PLYTABTABTABifspacetheIpspace!=spacei[0]:PLYTABTABTABTABprintspace"+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"PLYTABTABTABTABtheIpspace=spacei[0]PLYTABTABTABTABCpspace=spaceParamikoClass(theIp,port,user,passwd)PLYTABTABTABpathspace=spacei[1]PLYTABTABTABlocal_filespace=space'%s'space%cfilenamePLYTABTABTABremote_dirspace=space'%s/'space%pathPLYTABTABTABCp.put_file(local_file,remote_dir)PLY#部署所有模块PLYTABelifspacedeployapp:PLYTABTABinfospace=spaceraw_input('Arespaceyouspacesurespaceusespacethisspaceoption(yes/no):')PLYTABTABifspaceinfospace==space'yes':PLYTABTABTABmkdirWebapp()PLYTABTABTABdeployRun()PLYTABTABelifspaceinfospace==space'no':PLYTABTABTABsys.exit(3)PLYTABTABelse:PLYTABTABTABprintspace'Sorry,mustspacechoicespaceyesspaceorspaceno.'PLYTABelse:PLYTABTABprint('syntaxspaceerror!Pleasespaceusespace-hspaceforspacehelp!')PLY
+#!/usr/bin/env python
+# encoding:utf-8
+__author__ = 'Chocolee'
+import sys
+sys.path.append("..")
+from lib.LogicSQLClass import *
+from lib.ParamikoClass import *
+from optparse import OptionParser
+import multiprocessing
+import re
+
+t = SQLClass()
+#申明使用哪个用户操作远程设备
+useUser = 'zhuser'
+appSourcePath = '/home/zhuser/innerapp'
+processNum=10
+userInfo = t.findUserPass(useUser)
+for i in userInfo:
+	user = i[0]
+	port = i[1]
+	passwd = i[2]
+
+def check_Ip(ip):
+	hosts = []
+	hosts_ok = []
+	iphost = t.findHosts()
+	for h in iphost:
+		hosts.append(str(h[0]))
+	ip = {}.fromkeys(ip).keys()
+	for i in ip:
+		if i not in hosts:
+			print "\033[1;31;40m%s not exist,please check!\033[0m" %i
+			#continue
+			sys.exit(3)
+
+def check_ModName(mod):
+	modnames = []
+	modulename = t.findModName()
+	for m in modulename:
+		modnames.append(str(m[0]))
+	for mn in mod:
+		if mn not in modnames:
+			print "\033[1;31;40mModName %s not exist,please check!\033[0m" %mn
+			print 30*'*'
+			print "\033[1;33;40mInput Reference ModName:\033[0m" 
+			for m in modnames:
+				print "\033[1;33;40m%s\033[0m" %m,
+			sys.exit(3)
+
+#创建程序目录
+def mkWebappDir(host):
+	p = ParamikoClass(host,port,user,passwd)
+	p.cmd_run('mkdir -p /opt/innerapp')
+
+def mkSupDir(host):
+	p = ParamikoClass(host,port,user,passwd)
+	p.cmd_run('mkdir -p /opt/supervise')
+
+#帮助信息
+def helpFunc(a,b,c,d):
+	print "USAGE:"
+	print "-h or --help for help."
+	print "-M or --module for modulename,can use ',' example:acp,cmp,nav."
+	print "-i or --ip for ip address,can use ',' example:192.168.199.11,10.10.10.10."
+	print "-a or --all for all ip address,list of db."
+	print "-D or --deployapp for deploy all app,use this option must be careful!"
+	print "-n or --number for CPname."
+	print "EXAMPLE: 'python %s -i 10.10.10.10 -M acp'" %sys.argv[0]
+	sys.exit(3)
+
+#远程推送配置文件
+def sendAndConf(infoList):
+	host = infoList[0]
+	mname = infoList[1]
+	path = infoList[2]
+	cpname = infoList[3]
+	tmp = path.split('/')
+	filename = tmp[-1]
+	djob_number = path.split('_')[-1]
+	p = ParamikoClass(host,port,user,passwd)
+	local_dir = '%s/%s/' %(appSourcePath,mname)
+	remote_dir = '%s/' %path
+	dircmd= "rm -rf %s%s*"%(remote_dir,mname)
+	p.cmd_run(dircmd)
+	p.upload(local_dir,remote_dir)
+	if mname=="djob":
+		cmd = "sed -i '/ComputerName/ s#CP01#%s#g' %s/servicesetting.properties;sed -i 's/^\(org.quartz.scheduler.instanceId:\).*/\\1instance_%s/' %s/quartz.properties" %(cpname,path,djob_number,path)
+	else:
+		cmd = "sed -i '/ComputerName/ s#CP01#%s#g' %s/servicesetting.properties" %(cpname,path)
+	p.cmd_run(cmd)
+	cmd = "cd %s;mv %s.jar %s.jar" %(path,mname,filename)
+	p.cmd_run(cmd)
+	print('%s :upload %s \033[1;32;40mOK\033[0m'%(host,filename))
+
+def mkdirWebapp():
+	pool = multiprocessing.Pool(processes=processNum)
+	hostlist = t.findHosts()
+	for i in hostlist:
+		pool.apply_async(mkWebappDir,(i[0],))
+	pool.close()
+	pool.join()
+
+#部署模块
+def deployRun():
+	pool = multiprocessing.Pool(processes=processNum)
+	listinfo = t.sendFileInfo()
+	for i in listinfo:
+		pool.apply_async(sendAndConf,(i,))
+	pool.close()
+	pool.join()
+
+#申明帮助参数属性
+parser = OptionParser(add_help_option=0)
+parser.add_option("-h", "--help", action="callback", callback=helpFunc)
+parser.add_option("-M", "--module", action="store", type="string", dest="module",default="")
+parser.add_option("-m", "--mid", action="store", type="string", dest="mid",default="")
+parser.add_option("-i", "--ip", action="store", type="string", dest="ip",default="")
+parser.add_option("-a", "--all", action="store_true", dest="all")
+parser.add_option("-D", "--deployapp", action="store_true", dest="deployapp")
+parser.add_option("-n", "--number", action="store", type="string", dest="number",default="")
+parser.add_option("-C", "--changefile", action="store", type="string", dest="cfilename",default="")
+(options, args) = parser.parse_args()
+ip = options.ip.split(',')
+mod = options.module.split(',')
+mid=options.mid
+allip = options.all
+deployapp = options.deployapp
+order=options.number.split(',')
+cfilename = options.cfilename
+commandoption=args
+
+def multipoolcess(infolist):
+	pool = multiprocessing.Pool(processes=processNum)
+	modlen =  len(infolist)
+	count = modlen/2
+	linfo = modlen%2
+	if linfo != 0:
+		count = count+1
+	if mid == "head":
+		i = 0
+		while i < count:
+			pool.apply_async(sendAndConf,(infolist[i],))
+			i = i+1
+	elif mid == "tail":
+		i = count
+		while i < modlen:
+			pool.apply_async(sendAndConf,(infolist[i],))
+			i = i+1
+	else:		
+		for i in infolist:
+			pool.apply_async(sendAndConf,(i,))
+	pool.close()
+	pool.join()
+
+if __name__ == '__main__':
+	if len(sys.argv) == 1:
+		helpFunc('a','b','c','d')
+	#获取模块列表和ip列表
+	modulelist = []
+	iplist = []
+	tmp = t.findModName()
+	for i in tmp:
+		modulelist.append(str(i[0]))
+	tmp = t.findHosts()
+	for i in tmp:
+		iplist.append(str(i[0]))
+	if ip != ['']:
+		check_Ip(ip)
+	if mod != ['']:
+		check_ModName(mod)
+	if order != ['']:
+		allip = True
+		order_new = order
+		order = ['']
+		for i,j in enumerate(order_new):
+			j = re.sub(r'[a-zA-Z]*',"",j,0)
+			if j.find("-",0,len(j)) != -1:
+				# j = j.upper().replace("CP","")
+				oj=j.split('-')
+				for iobj in range(int(oj[0]),int(oj[1])+1):
+					order.append("CP%s"%iobj)
+			else:
+				order.append("CP%s"%j)
+				# order.append(order_new[i].upper())
+	if mid != "":
+		if mid != "head" and mid != "tail":
+			print "\033[1;31;40mmid not correct,please check!\033[0m"
+			sys.exit(3)
+		else:
+			allip = True
+	if len(mod) != 1 and order != ['']:
+		print "\033[1;31;40morder and several modules cannot use together,please modify!\033[0m"
+		sys.exit(3)
+	if len(mod) != 1 and mid != "":
+		print "\033[1;31;40mmid and several modules cannot use together,please modify!\033[0m"
+		sys.exit(3)
+	if ip != [''] and mid != "":
+		print "\033[1;31;40mmid and ip cannot use together,please modify!\033[0m"
+		sys.exit(3)
+	if order != [''] and mid != "":
+		print "\033[1;31;40mmid and order number cannot use together,please modify!\033[0m"
+		sys.exit(3)
+	if order != [''] and ip != ['']:
+		print "\033[1;31;40mip and order number cannot use together,please modify!\033[0m"
+		sys.exit(3)
+	
+#判断输入的ip及模块名称是否合法，是否存在在配置文件中。
+	if mod != [''] and ip != ['']:
+		tmplist = []
+		infolist = []
+		for i in mod:
+			for n in ip:
+				tmplist.append(t.findIpModInfo(n,i))
+		while [] in tmplist:
+			tmplist.remove([])
+		for i in tmplist:
+			for n in i:
+				infolist.append(n)
+		if infolist != []:
+			multipoolcess(infolist)
+		else:
+			print('Error!please check db file!!')
+#对模块进行批量部署，更新模块也是这一判断
+	elif mod != [''] and allip == True:
+		orderStr = ""
+		if order != ['']:
+			orderStr = " and ("
+			for n in order:
+				orderStr = orderStr + "CPname='%s' or "%n
+			orderStr = re.sub(r' or $',"",orderStr,0) + ")"
+		tmplist = []
+		infolist = []
+		for i in mod:
+			tmplist.append(t.findIPInfo(i,orderStr))
+		for i in tmplist:
+			for n in i:
+				infolist.append(n)
+		if infolist != []:
+			multipoolcess(infolist)
+		else:
+			print('Error!please check db file!!')
+	elif cfilename != ['']:
+		AllIpPath=t.FindAllIpPath()
+		theIp=AllIpPath[1][1]
+		Cp = ParamikoClass(theIp,port,user,passwd)
+		for i in AllIpPath:
+			if theIp != i[0]:
+				print "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+				theIp = i[0]
+				Cp = ParamikoClass(theIp,port,user,passwd)
+			path = i[1]
+			local_file = '%s' %cfilename
+			remote_dir = '%s/' %path
+			Cp.put_file(local_file,remote_dir)
+#部署所有模块
+	elif deployapp:
+		info = raw_input('Are you sure use this option(yes/no):')
+		if info == 'yes':
+			mkdirWebapp()
+			deployRun()
+		elif info == 'no':
+			sys.exit(3)
+		else:
+			print 'Sorry,must choice yes or no.'
+	else:
+		print('syntax error!Please use -h for help!')
+
