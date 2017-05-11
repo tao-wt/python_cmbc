@@ -1,1 +1,312 @@
-#!/usr/bin/envspacepythonPLY#spaceencoding:utf-8PLYPLYPLYimportspacesysPLYimportspaceosPLYsys.path.append("..")PLYfromspacelib.LogicSQLClassspaceimportspace*PLYfromspacelib.ParamikoClassspaceimportspace*PLYimportspacerespacePLYimportspacemultiprocessingPLYfromspaceoptparsespaceimportspaceOptionParserPLYimportspacetimePLYPLYdefspacehelpFunc(a,b,c,d):PLYTABprintspace"\033[32;1mForspacehelp:"PLYTABprintspace"superstar.pyspace[-aspace(Allspaceip)space-ispace(IPspaceaddress,xx1,xx2..)space-Mspace(Modulespacename)space-sspace(Superspacemode)space-cspace(start|stop)]"PLYTABprintspace"superstar.pyspace-aspace-cspacestart|stopspace--allspace--cmdspacestart|stop"PLYTABprintspace"superstar.pyspace-ispaceipaddr,[xx,xx]space-cspacestart|stopspace--ipspacex1,x2,..space--cmdspacestart|stop"PLYTABprintspace"superstar.pyspace-Mspacemodulename,[xx,xx]space-cspacestart|stopspace--Modspacemod1,mod2space--cmdspacestart|stop"PLYTABprintspace"superstar.pyspace-ispaceipaddr,[xx,xx]space-Mspacemodulename,[xx,xx]space-cspacestart|stop"PLYTABprintspace"-nspaceorspace--numberspaceforspaceCPname."PLYTABprintspace'''---------------------------------------------------------------------------------------PLYForspaceexamples:PLY1spaceforspacegeneralspaceusage:PLYspacespacepythonspacesuperstar.pyspace-aspace-cspacestartPLYspacespacepythonspacesuperstar.pyspace-Mspacelogspace-cspacestartPLYspacespacepythonspacesuperstar.pyspace-ispace192.168.199.117,192.168.199.118space-cspacestartPLYspacespacepythonspacesuperstar.pyspace-ispace192.168.199.117,192.168.199.118space-Mspacelogspace-cspacestartPLY---------------------------------------------------------------------------------------\033[0m'''PLYdefspacecheck_Ip(ip):PLYTABhostsspace=space[]PLYTABhosts_okspace=space[]PLYTABiphostspace=spacet.findHosts()PLYTABforspacehspaceinspaceiphost:PLYTABTABhosts.append(str(h[0]))PLYTABipspace=space{}.fromkeys(ip).keys()PLYTABforspaceispaceinspaceip:PLYTABTABifspaceispacenotspaceinspacehosts:PLYTABTABTABprintspace"\033[1;31;40m%sspacenotspaceexist,pleasespacecheck!\033[0m"space%iPLYTABTABTAB#continuePLYTABTABTABsys.exit(3)PLYPLYdefspacecheck_ModName(mod):PLYTABmodnamesspace=space[]PLYTABmodulenamespace=spacet.findModName()PLYTABforspacemspaceinspacemodulename:PLYTABTABmodnames.append(str(m[0]))PLYTABforspacemnspaceinspacemod:PLYTABTABifspacemnspacenotspaceinspacemodnames:PLYTABTABTABprintspace"\033[1;31;40mModNamespace%sspacenotspaceexist,pleasespacecheck!\033[0m"space%mnPLYTABTABTABprintspace30*'*'PLYTABTABTABprintspace"\033[1;33;40mInputspaceReferencespaceModName:\033[0m"spacePLYTABTABTABforspacemspaceinspacemodnames:PLYTABTABTABTABprintspace"\033[1;33;40m%s\033[0m"space%m,PLYTABTABTABsys.exit(3)PLYPLYifspacelen(sys.argv)space!=space1:PLYspacespacespacespacespacespacespacespaceifspace"-"spaceinspacesys.argv:PLYspacespacespacespacespacespacespacespacespacespacespacespacespacespacespacespaceprintspace"\033[1;31;40merrorspaceargv:-,pleasespacemodify!\033[0m"PLYspacespacespacespacespacespacespacespacespacespacespacespacespacespacespacespacesys.exit(3)PLYparserspace=spaceOptionParser(add_help_option=0)PLYparser.add_option("-h",space"--help",spaceaction="callback",spacecallback=helpFunc)PLYparser.add_option("-c",space"--cmd",spaceaction="store",spacetype="string",spacedest="cmd",default="")PLYparser.add_option("-a",space"--all",spaceaction="store_true",spacedest="all")PLYparser.add_option("-i",space"--ip",spaceaction="store",spacetype="string",spacedest="ip",spacedefault="")PLYparser.add_option("-M",space"--Mod",spaceaction="store",spacetype="string",spacedest="modname",spacedefault="")PLYparser.add_option("-m",space"--mid",spaceaction="store",spacetype="string",spacedest="mid",default="")PLYparser.add_option("-n",space"--number",spaceaction="store",spacetype="string",spacedest="number",default="")PLYparser.add_option("-f",space"--force",spaceaction="store_true",spacedest="killforce")PLYPLY(options,spaceargs)space=spaceparser.parse_args()PLYruncmd=options.cmdPLYrunall=options.allPLYrunip=options.ipPLYrunmod=options.modnamePLYmid=options.midPLYorder=options.number.split(',')PLYcommandoption=argsPLYkillforce=options.killforcePLYnum=8PLYPLYtspace=spaceSQLClass()PLYPLY#获取数据库中机器的用户名，端口和密码PLYuserInfospace=spacet.findUserPass('zhuser')PLYforspaceispaceinspaceuserInfo:PLYTABuserspace=spacei[0]PLYTABportspace=spaceint(i[1])PLYTABpasswdspace=spacei[2]PLYPLY#启停所有模块函数,传入IP参数启停该机器上所有模块，除supervise进程外。spaceBEGINPLYPLY#启动configcenter模块。PLYdefspacestartAll(ip):PLYTABloginspace=spaceParamikoClass(ip[0],port,user,passwd)PLYTABforspacemdspaceinspacet.findipConfPath(ip[0]):PLYTABTABmodule=md[0].strip().split("/")[-1]PLYTABTABcmd="cdspace%s;bashspacestartAndStop.shspacestartspace%s;exit;"space%(md[0],module)PLYTABTABlogin.cmd_run(cmd)PLYTABTABprintspace"\033[32;1m%sspace:space%sspaceisspaceok\033[0m"space%(ip[0],module)PLYPLY#启动除configcenter之外的所有模块PLYdefspacestartAllother(ip):PLYTABspaceloginspace=spaceParamikoClass(ip[0],port,user,passwd)PLYTABspaceforspacemdspaceinspacet.findipOtherPath(ip[0]):PLYTABTABmodule=md[0].strip().split("/")[-1]PLYTABTABcmd="cdspace%s;bashspacestartAndStop.shspacestartspace%s;exit;"space%(md[0],module)PLYTABTABlogin.cmd_run(cmd)PLYTABTABprintspace"\033[32;1m%sspace:space%sspaceisspaceok\033[0m"space%(ip[0],module)PLYPLY#停掉机器上所有模块PLYdefspacestopAll(ip):PLYTABloginspace=spaceParamikoClass(ip[0],port,user,passwd)PLYTABifspacekillforcespace==spaceTruespace:PLYTABTABstopforce="-9"PLYTABelse:PLYTABTABstopforce=""PLYTABcmd="psspace-ef|grepspace'/home/zhuser/jdk1.7.0_25/bin/java'|grepspace-vspacegrep|awkspace'{printspace$2}'|xargsspacekillspace%sspace"%stopforcePLYTABlogin.cmd_run(cmd)PLYTABprintspace"\033[31;1mspace%sspacehasspacebeenspacekilled.\033[0m"space%(ip[0])PLY#启停所有模块函数spaceENDPLYPLYPLY#启停指定IP地址的函数spaceBEGINPLYdefspacefor_specified_ip(ip):PLYTABloginspace=spaceParamikoClass(ip,port,user,passwd)PLYTABifspaceruncmdspace==space"start":PLYTABTABforspacemdspaceinspacet.findipConfPath(ip):PLYTABTABTABmodule=md[0].strip().split("/")[-1]PLYTABTABTABcmd="cdspace%s;bashspacestartAndStop.shspacestartspace%s;exit;"space%(md[0],module)PLYTABTABTABlogin.cmd_run(cmd)PLYTABTABTABprintspace"\033[32;1m%sspace:space%sspaceisspaceok\033[0m"space%(ip,module)PLYTABTABtime.sleep(5)PLYTABTABforspacemdspaceinspacet.findipOtherPath(ip):PLYTABTABTABmodule=md[0].strip().split("/")[-1]PLYTABTABTABcmd="cdspace%s;bashspacestartAndStop.shspacestartspace%s;exit;"space%(md[0],module)PLYTABTABTABlogin.cmd_run(cmd)PLYTABTABTABprintspace"\033[32;1m%sspace:space%sspaceisspaceok\033[0m"space%(ip,module)PLYTABelse:PLYTABTABifspacekillforcespace==spaceTruespace:PLYTABTABTABstopforce="-9"PLYTABTABelse:PLYTABTABTABstopforce=""PLYTABTABcmd="psspace-ef|grepspace'/home/zhuser/jdk1.7.0_25/bin/java'|grepspace-vspacegrep|awkspace'{printspace$2}'|xargsspacekillspace%sspace"%stopforcePLYTABTABlogin.cmd_run(cmd)PLYTABTABprintspace"\033[31;1mspace%sspacehasspacebeenspacekilled.\033[0m"space%(ip)PLYPLY#启动指定模块的函数PLYdefspacestartOrStopMod(j):PLYTABipspace=spacej[0]PLYTABmodPathspace=spacej[1]PLYTABloginspace=spaceParamikoClass(ip,port,user,passwd)PLYTABmodule=modPath.strip().split("/")[-1]PLYTABifspaceruncmdspace==space"start":PLYTABTABcmd="cdspace%s;bashspacestartAndStop.shspacestartspace%s;exit;"space%(modPath,module)PLYTABelse:PLYTABTABifspacekillforcespace==spaceTruespace:PLYTABTABTABstopforce="-9"PLYTABTABelse:PLYTABTABTABstopforce=""PLYTABTABcmd="psspace-efspace|spacegrepspace'/home/zhuser/jdk1.7.0_25/bin/java'space|spacegrepspace'\-jarspace%s.jar'space|spacegrepspace-vspacegrepspace|spaceawkspace'{printspace$2}'space|spacexargsspace-nspace1space-ispacekillspace%sspace{};"%(module,stopforce)PLYTABlogin.cmd_run(cmd)PLYTABprintspace"\033[32;1m%sspace:space%sspaceisspace%sspaceok\033[0m"space%(ip,module,runcmd)PLYPLYdefspacerunApp():#启停所有服务的函数PLYTABifspaceruncmdspace==space"start":PLYTABTABforspaceipspaceinspacet.findHosts():PLYTABTABTABstartAll(ip)PLYTABTABtime.sleep(6)PLYPLYTABTABpoolspace=spacemultiprocessing.Pool(processes=num)PLYTABTABforspaceipspaceinspacet.findHosts():PLYTABTABTABpool.apply_async(startAllother,(ip,))PLYTABTABpool.close()PLYTABTABpool.join()PLYPLYTABelse:PLYTABTABpoolspace=spacemultiprocessing.Pool(processes=num)PLYTABTABforspaceipspaceinspacet.findHosts():PLYTABTABTABpool.apply_async(stopAll,(ip,))PLYTABTABpool.close()PLYTABTABpool.join()PLYPLYdefspacerun_some():space#指定IP地址启停的函数PLYTABpoolspace=spacemultiprocessing.Pool(processes=num)PLYTABforspaceipspaceinspaceinput_ip_list:PLYTABTABifspaceipspaceinspaceall_ip_list:PLYTABTABTABpool.apply_async(for_specified_ip,(ip,))PLYTABTABelse:PLYTABTABTABprintspace"[\033[33;1m%sspaceisspacenotspaceexist\033[0m]"space%(ip)PLYTABpool.close()PLYTABpool.join()PLYPLYpoolspace=spacemultiprocessing.Pool(processes=num)#指定并发进程数量PLYinput_ip_list=runip.strip().split(',')space#获取-i给出的IP地址列表PLYall_ip_list=[]#IP列表PLYinput_mod_list=runmod.strip().split(',')#取出参数中所有的模块PLYsomemod=[]PLYinfolistspace=space[]PLYdefspacemoduleappend(list):PLYTABnewListspace=space[]PLYTABforspaceispaceinspacelist:PLYTABTABforspacenspaceinspacei:PLYTABTABTABnewList.append(n)PLYTABreturnspacenewListPLYPLY#检查参数:ip,mod,mid是否合法兼容PLYifspaceinput_ip_listspace!=space['']:PLYTABcheck_Ip(input_ip_list)PLYifspaceinput_mod_listspace!=space['']:PLYTABcheck_ModName(input_mod_list)PLYifspacemidspace!=space"":PLYTABifspacemidspace!=space"head"spaceandspacemidspace!=space"tail":PLYTABTABprintspace"\033[1;31;40mmidspacenotspacecorrect,pleasespacecheck!\033[0m"PLYTABTABsys.exit(3)PLYifspaceruncmdspace!=space"":PLYTABifspaceruncmdspace!=space"stop"spaceandspaceruncmdspace!=space"start":PLYTABTABprintspace"\033[1;31;40mcmdspacenotspacecorrect,pleasespacecheck!\033[0m"PLYTABTABsys.exit(3)PLYelse:PLYTABprintspace"\033[1;31;40mcmdspacemustspacehave,pleasespacecheck!\033[0m"PLYTABsys.exit(3)PLYifspaceorderspace!=space['']:PLYTABorder_newspace=spaceorderPLYTABorderspace=space['']PLYTABforspacei,jspaceinspaceenumerate(order_new):PLYTABTABjspace=spacere.sub(r'[a-zA-Z]*',"",j,0)PLYTABTABifspacej.find("-",0,len(j))space!=space-1:PLYTABTABTAB#spacejspace=spacej.upper().replace("CP","")PLYTABTABTABoj=j.split('-')PLYTABTABTABforspaceiobjspaceinspacerange(int(oj[0]),int(oj[1])+1):PLYTABTABTABTABorder.append("CP%s"%iobj)PLYTABTABelse:PLYTABTABTABorder.append("CP%s"%j)PLYTABTABTAB#spaceorder.append(order_new[i].upper())PLYPLY#spaceifspacelen(input_mod_list)space!=space1spaceandspacemidspace!=space"":PLYTAB#spaceprintspace"\033[1;31;40mmidspaceandspaceseveralspacemodulesspacecannotspaceusespacetogether,pleasespacemodify!\033[0m"PLYTAB#spacesys.exit(3)PLYifspacelen(input_mod_list)space!=space1spaceandspaceorderspace!=space['']:PLYTABprintspace"\033[1;31;40morderspaceandspaceseveralspacemodulesspacecannotspaceusespacetogether,pleasespacemodify!\033[0m"PLYTABsys.exit(3)PLYifspaceinput_ip_listspace!=space['']spaceandspacemidspace!=space"":PLYTABprintspace"\033[1;31;40mmidspaceandspaceipspacecannotspaceusespacetogether,pleasespacemodify!\033[0m"PLYTABsys.exit(3)PLYifspaceorderspace!=space['']spaceandspacemidspace!=space"":PLYTABprintspace"\033[1;31;40mmidspaceandspaceorderspacenumberspacecannotspaceusespacetogether,pleasespacemodify!\033[0m"PLYTABsys.exit(3)PLYifspaceorderspace!=space['']spaceandspaceinput_ip_listspace!=space['']:PLYTABprintspace"\033[1;31;40mipspaceandspaceorderspacenumberspacecannotspaceusespacetogether,pleasespacemodify!\033[0m"PLYTABsys.exit(3)PLYPLY#普通模式(不带supervise)PLYifspacelen(input_mod_list[0])space!=space0spaceandspacelen(input_ip_list[0])space!=space0:#如果指定了IP地址，命令start和模块名。PLYTABforspacespaceipspaceinspaceinput_ip_list:PLYTABTABforspacemodspaceinspaceinput_mod_list:PLYTABTABTABsomemod.append(t.QTfindPath(mod,ip))PLYTABinfolistspace=spacemoduleappend(somemod)PLYTABifspaceinfolistspace!=space[]:TABTABPLYTABTABforspaceispaceinspaceinfolist:PLYTABTABTABpool.apply_async(startOrStopMod,(i,))PLYTABTABpool.close()PLYTABTABpool.join()PLYTABelse:PLYTABTABprint('Error!pleasespacecheckspacedbspacefile!!')PLYelifspacelen(input_mod_list[0])space!=space0spaceandspacespacelen(input_ip_list[0])space==space0:#如果指定了模块名字和命令start。PLYTABorderStrspace=space""PLYTABifspaceorderspace!=space['']:PLYTABTABorderStrspace=space"spaceandspace("PLYTABTABforspacenspaceinspaceorder:PLYTABTABTABorderStrspace=spaceorderStrspace+space"CPname='%s'spaceorspace"%nPLYTABTABorderStrspace=spacere.sub(r'spaceorspace$',")",orderStr,0)PLYTABforspaceispaceinspaceinput_mod_list:PLYTABTABgetListspace=space[]PLYTABTABgetList.append(t.QTfindIp(i,orderStr))PLYTABTABlistspace=spacemoduleappend(getList)PLYTABTABmodlenspace=spacespacelen(list)PLYTABTABcountspace=spacemodlen/2PLYTABTABlinfospace=spacemodlen%2PLYTABTABifspacelinfospace!=space0:PLYTABTABTABcountspace=spacecount+1PLYTABTABifspacemidspace==space"head":PLYTABTABTABispace=space0PLYTABTABTABwhilespaceispace<spacecount:PLYTABTABTABTABinfolist.append(list[i])PLYTABTABTABTABispace=spacei+1PLYTABTABelifspacemidspace==space"tail":PLYTABTABTABispace=spacecountPLYTABTABTABwhilespaceispace<spacemodlen:PLYTABTABTABTABinfolist.append(list[i])PLYTABTABTABTABispace=spacei+1PLYTABTABelse:PLYTABTABTABforspaceispaceinspacelist:PLYTABTABTABTABinfolist.append(i)PLYTABifspaceinfolistspace!=space[]:PLYTABTABforspaceispaceinspaceinfolist:PLYTABTABTABpool.apply_async(startOrStopMod,(i,))PLYTABTABpool.close()PLYTABTABpool.join()PLYTABelse:PLYTABTABprint('Error!pleasespacecheckspacedbspacefile!!')PLYelifspacelen(input_ip_list[0])space!=space0spaceandspacelen(input_mod_list[0])space==space0:space#只指定IP地址PLYTABforspaceispaceinspacet.findHosts():PLYTABTABall_ip_list.append(str(i[0]))PLYTABrun_some()PLYPLYelifspacerunallspace==spaceTrue:#指定-a，runall为true，执行所有操作PLYTABrunApp()PLYPLYelse:PLYTABhelpFunc('a','b','c','d')
+#!/usr/bin/env python
+# encoding:utf-8
+
+
+import sys
+import os
+sys.path.append("..")
+from lib.LogicSQLClass import *
+from lib.ParamikoClass import *
+import re 
+import multiprocessing
+from optparse import OptionParser
+import time
+
+def helpFunc(a,b,c,d):
+	print "\033[32;1mFor help:"
+	print "superstar.py [-a (All ip) -i (IP address,xx1,xx2..) -M (Module name) -s (Super mode) -c (start|stop)]"
+	print "superstar.py -a -c start|stop --all --cmd start|stop"
+	print "superstar.py -i ipaddr,[xx,xx] -c start|stop --ip x1,x2,.. --cmd start|stop"
+	print "superstar.py -M modulename,[xx,xx] -c start|stop --Mod mod1,mod2 --cmd start|stop"
+	print "superstar.py -i ipaddr,[xx,xx] -M modulename,[xx,xx] -c start|stop"
+	print "-n or --number for CPname."
+	print '''---------------------------------------------------------------------------------------
+For examples:
+1 for general usage:
+  python superstar.py -a -c start
+  python superstar.py -M log -c start
+  python superstar.py -i 192.168.199.117,192.168.199.118 -c start
+  python superstar.py -i 192.168.199.117,192.168.199.118 -M log -c start
+---------------------------------------------------------------------------------------\033[0m'''
+def check_Ip(ip):
+	hosts = []
+	hosts_ok = []
+	iphost = t.findHosts()
+	for h in iphost:
+		hosts.append(str(h[0]))
+	ip = {}.fromkeys(ip).keys()
+	for i in ip:
+		if i not in hosts:
+			print "\033[1;31;40m%s not exist,please check!\033[0m" %i
+			#continue
+			sys.exit(3)
+
+def check_ModName(mod):
+	modnames = []
+	modulename = t.findModName()
+	for m in modulename:
+		modnames.append(str(m[0]))
+	for mn in mod:
+		if mn not in modnames:
+			print "\033[1;31;40mModName %s not exist,please check!\033[0m" %mn
+			print 30*'*'
+			print "\033[1;33;40mInput Reference ModName:\033[0m" 
+			for m in modnames:
+				print "\033[1;33;40m%s\033[0m" %m,
+			sys.exit(3)
+
+if len(sys.argv) != 1:
+        if "-" in sys.argv:
+                print "\033[1;31;40merror argv:-,please modify!\033[0m"
+                sys.exit(3)
+parser = OptionParser(add_help_option=0)
+parser.add_option("-h", "--help", action="callback", callback=helpFunc)
+parser.add_option("-c", "--cmd", action="store", type="string", dest="cmd",default="")
+parser.add_option("-a", "--all", action="store_true", dest="all")
+parser.add_option("-i", "--ip", action="store", type="string", dest="ip", default="")
+parser.add_option("-M", "--Mod", action="store", type="string", dest="modname", default="")
+parser.add_option("-m", "--mid", action="store", type="string", dest="mid",default="")
+parser.add_option("-n", "--number", action="store", type="string", dest="number",default="")
+parser.add_option("-f", "--force", action="store_true", dest="killforce")
+
+(options, args) = parser.parse_args()
+runcmd=options.cmd
+runall=options.all
+runip=options.ip
+runmod=options.modname
+mid=options.mid
+order=options.number.split(',')
+commandoption=args
+killforce=options.killforce
+num=8
+
+t = SQLClass()
+
+#获取数据库中机器的用户名，端口和密码
+userInfo = t.findUserPass('zhuser')
+for i in userInfo:
+	user = i[0]
+	port = int(i[1])
+	passwd = i[2]
+
+#启停所有模块函数,传入IP参数启停该机器上所有模块，除supervise进程外。 BEGIN
+
+#启动configcenter模块。
+def startAll(ip):
+	login = ParamikoClass(ip[0],port,user,passwd)
+	for md in t.findipConfPath(ip[0]):
+		module=md[0].strip().split("/")[-1]
+		cmd="cd %s;bash startAndStop.sh start %s;exit;" %(md[0],module)
+		login.cmd_run(cmd)
+		print "\033[32;1m%s : %s is ok\033[0m" %(ip[0],module)
+
+#启动除configcenter之外的所有模块
+def startAllother(ip):
+	 login = ParamikoClass(ip[0],port,user,passwd)
+	 for md in t.findipOtherPath(ip[0]):
+		module=md[0].strip().split("/")[-1]
+		cmd="cd %s;bash startAndStop.sh start %s;exit;" %(md[0],module)
+		login.cmd_run(cmd)
+		print "\033[32;1m%s : %s is ok\033[0m" %(ip[0],module)
+
+#停掉机器上所有模块
+def stopAll(ip):
+	login = ParamikoClass(ip[0],port,user,passwd)
+	if killforce == True :
+		stopforce="-9"
+	else:
+		stopforce=""
+	cmd="ps -ef|grep '/home/zhuser/jdk1.7.0_25/bin/java'|grep -v grep|awk '{print $2}'|xargs kill %s "%stopforce
+	login.cmd_run(cmd)
+	print "\033[31;1m %s has been killed.\033[0m" %(ip[0])
+#启停所有模块函数 END
+
+
+#启停指定IP地址的函数 BEGIN
+def for_specified_ip(ip):
+	login = ParamikoClass(ip,port,user,passwd)
+	if runcmd == "start":
+		for md in t.findipConfPath(ip):
+			module=md[0].strip().split("/")[-1]
+			cmd="cd %s;bash startAndStop.sh start %s;exit;" %(md[0],module)
+			login.cmd_run(cmd)
+			print "\033[32;1m%s : %s is ok\033[0m" %(ip,module)
+		time.sleep(5)
+		for md in t.findipOtherPath(ip):
+			module=md[0].strip().split("/")[-1]
+			cmd="cd %s;bash startAndStop.sh start %s;exit;" %(md[0],module)
+			login.cmd_run(cmd)
+			print "\033[32;1m%s : %s is ok\033[0m" %(ip,module)
+	else:
+		if killforce == True :
+			stopforce="-9"
+		else:
+			stopforce=""
+		cmd="ps -ef|grep '/home/zhuser/jdk1.7.0_25/bin/java'|grep -v grep|awk '{print $2}'|xargs kill %s "%stopforce
+		login.cmd_run(cmd)
+		print "\033[31;1m %s has been killed.\033[0m" %(ip)
+
+#启动指定模块的函数
+def startOrStopMod(j):
+	ip = j[0]
+	modPath = j[1]
+	login = ParamikoClass(ip,port,user,passwd)
+	module=modPath.strip().split("/")[-1]
+	if runcmd == "start":
+		cmd="cd %s;bash startAndStop.sh start %s;exit;" %(modPath,module)
+	else:
+		if killforce == True :
+			stopforce="-9"
+		else:
+			stopforce=""
+		cmd="ps -ef | grep '/home/zhuser/jdk1.7.0_25/bin/java' | grep '\-jar %s.jar' | grep -v grep | awk '{print $2}' | xargs -n 1 -i kill %s {};"%(module,stopforce)
+	login.cmd_run(cmd)
+	print "\033[32;1m%s : %s is %s ok\033[0m" %(ip,module,runcmd)
+
+def runApp():#启停所有服务的函数
+	if runcmd == "start":
+		for ip in t.findHosts():
+			startAll(ip)
+		time.sleep(6)
+
+		pool = multiprocessing.Pool(processes=num)
+		for ip in t.findHosts():
+			pool.apply_async(startAllother,(ip,))
+		pool.close()
+		pool.join()
+
+	else:
+		pool = multiprocessing.Pool(processes=num)
+		for ip in t.findHosts():
+			pool.apply_async(stopAll,(ip,))
+		pool.close()
+		pool.join()
+
+def run_some(): #指定IP地址启停的函数
+	pool = multiprocessing.Pool(processes=num)
+	for ip in input_ip_list:
+		if ip in all_ip_list:
+			pool.apply_async(for_specified_ip,(ip,))
+		else:
+			print "[\033[33;1m%s is not exist\033[0m]" %(ip)
+	pool.close()
+	pool.join()
+
+pool = multiprocessing.Pool(processes=num)#指定并发进程数量
+input_ip_list=runip.strip().split(',') #获取-i给出的IP地址列表
+all_ip_list=[]#IP列表
+input_mod_list=runmod.strip().split(',')#取出参数中所有的模块
+somemod=[]
+infolist = []
+def moduleappend(list):
+	newList = []
+	for i in list:
+		for n in i:
+			newList.append(n)
+	return newList
+
+#检查参数:ip,mod,mid是否合法兼容
+if input_ip_list != ['']:
+	check_Ip(input_ip_list)
+if input_mod_list != ['']:
+	check_ModName(input_mod_list)
+if mid != "":
+	if mid != "head" and mid != "tail":
+		print "\033[1;31;40mmid not correct,please check!\033[0m"
+		sys.exit(3)
+if runcmd != "":
+	if runcmd != "stop" and runcmd != "start":
+		print "\033[1;31;40mcmd not correct,please check!\033[0m"
+		sys.exit(3)
+else:
+	print "\033[1;31;40mcmd must have,please check!\033[0m"
+	sys.exit(3)
+if order != ['']:
+	order_new = order
+	order = ['']
+	for i,j in enumerate(order_new):
+		j = re.sub(r'[a-zA-Z]*',"",j,0)
+		if j.find("-",0,len(j)) != -1:
+			# j = j.upper().replace("CP","")
+			oj=j.split('-')
+			for iobj in range(int(oj[0]),int(oj[1])+1):
+				order.append("CP%s"%iobj)
+		else:
+			order.append("CP%s"%j)
+			# order.append(order_new[i].upper())
+
+# if len(input_mod_list) != 1 and mid != "":
+	# print "\033[1;31;40mmid and several modules cannot use together,please modify!\033[0m"
+	# sys.exit(3)
+if len(input_mod_list) != 1 and order != ['']:
+	print "\033[1;31;40morder and several modules cannot use together,please modify!\033[0m"
+	sys.exit(3)
+if input_ip_list != [''] and mid != "":
+	print "\033[1;31;40mmid and ip cannot use together,please modify!\033[0m"
+	sys.exit(3)
+if order != [''] and mid != "":
+	print "\033[1;31;40mmid and order number cannot use together,please modify!\033[0m"
+	sys.exit(3)
+if order != [''] and input_ip_list != ['']:
+	print "\033[1;31;40mip and order number cannot use together,please modify!\033[0m"
+	sys.exit(3)
+
+#普通模式(不带supervise)
+if len(input_mod_list[0]) != 0 and len(input_ip_list[0]) != 0:#如果指定了IP地址，命令start和模块名。
+	for  ip in input_ip_list:
+		for mod in input_mod_list:
+			somemod.append(t.QTfindPath(mod,ip))
+	infolist = moduleappend(somemod)
+	if infolist != []:		
+		for i in infolist:
+			pool.apply_async(startOrStopMod,(i,))
+		pool.close()
+		pool.join()
+	else:
+		print('Error!please check db file!!')
+elif len(input_mod_list[0]) != 0 and  len(input_ip_list[0]) == 0:#如果指定了模块名字和命令start。
+	orderStr = ""
+	if order != ['']:
+		orderStr = " and ("
+		for n in order:
+			orderStr = orderStr + "CPname='%s' or "%n
+		orderStr = re.sub(r' or $',")",orderStr,0)
+	for i in input_mod_list:
+		getList = []
+		getList.append(t.QTfindIp(i,orderStr))
+		list = moduleappend(getList)
+		modlen =  len(list)
+		count = modlen/2
+		linfo = modlen%2
+		if linfo != 0:
+			count = count+1
+		if mid == "head":
+			i = 0
+			while i < count:
+				infolist.append(list[i])
+				i = i+1
+		elif mid == "tail":
+			i = count
+			while i < modlen:
+				infolist.append(list[i])
+				i = i+1
+		else:
+			for i in list:
+				infolist.append(i)
+	if infolist != []:
+		for i in infolist:
+			pool.apply_async(startOrStopMod,(i,))
+		pool.close()
+		pool.join()
+	else:
+		print('Error!please check db file!!')
+elif len(input_ip_list[0]) != 0 and len(input_mod_list[0]) == 0: #只指定IP地址
+	for i in t.findHosts():
+		all_ip_list.append(str(i[0]))
+	run_some()
+
+elif runall == True:#指定-a，runall为true，执行所有操作
+	runApp()
+
+else:
+	helpFunc('a','b','c','d')
