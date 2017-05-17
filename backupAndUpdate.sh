@@ -5,6 +5,9 @@
 #			bash backupAndUpdate.sh "/sourcePath/(filename|dirname)"
 
 IFS=$' \t\n'
+OLDPATH=$PATH
+PATH=/bin:/usr/bin
+export PATH
 
 usage(){
         printf "usage:\n\t bash backupAndUpdate.sh '/sourcePath/(filename|dirname)'\n";
