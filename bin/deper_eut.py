@@ -260,7 +260,7 @@ if __name__ == '__main__':
 				Cp.put_file(cfilename,i[1])
 		else:
 			fileName = cfilename[0:slen]
-			dstpath = cfilename[slen+2:len(fileName)]
+			dstpath = cfilename[slen+2:len(cfilename)]
 			aIp = t.findHosts()
 			for i in aIp:
 				Cp = ParamikoClass(i[0],port,user,passwd)
