@@ -1,1 +1,97 @@
-#!/usr/bin/envspacepythonPLY#spaceencoding:utf-8PLY__author__space=space'Chocolee'PLYfromspaceSqliteClassspaceimportspace*PLYPLYclassspaceSQLClass(object):PLYTABsspace=spaceSqliteClass('../conf/tsck.db')PLYPLYTABdefspacesendFileInfo(self):PLYTABTABsqlspace=space'selectspaceip,modulename,path,CPnamespacefromspacemodule;'PLYTABTABreturnspaceself.s.queryAll(sql)PLYPLYTABdefspacefindIpModInfo(self,ip,modname):PLYTABTABsqlspace=space"selectspaceip,modulename,path,CPname,portspacefromspacemodulespace\PLYTABTABwherespaceipspace=space'%s'spaceandspacemodulenamespace=space'%s';"space%(ip,modname)PLYTABTABreturnspaceself.s.queryAll(sql)PLYPLYTAB#defspacefindIPInfo(self,modname):PLYTAB#spacespacespacespacesqlspace=space"selectspaceip,modulename,path,CPnamespacefromspacemodulespacewherespacemodulenamespace=space'%s'"space%modnamePLYTAB#spacespacespacespacereturnspaceself.s.queryAll(sql)PLYPLYTABdefspacefindIPInfo(self,modname,cpname):PLYTABTABsqlspace=space"selectspaceip,modulename,path,CPname,portspacefromspacemodulespacewherespacemodulenamespace=space'%s'%s"space%(modname,cpname)PLYTABTABreturnspaceself.s.queryAll(sql)PLYPLYTABdefspacefindUserPass(self,user):PLYTABTABsqlspace=space"selectspaceuser,port,passwordspacefromspaceuserspacewherespaceuserspace=space'%s'"space%userPLYTABTABreturnspaceself.s.queryAll(sql)PLYPLYTABdefspacefindHosts(self):PLYTABTABsqlspace=space"selectspacedistinctspaceipspacefromspacemodule;"PLYTABTABreturnspaceself.s.queryAll(sql)PLYPLYTABdefspacefindipConfPath(self,host):PLYTABTABsqlspace=space"selectspacepathspacefromspacemodulespacewherespaceipspace=space'%s'spaceandspacemodulenamespace=space'configcenter'"space%hostPLYTABTABreturnspaceself.s.queryAll(sql)PLYPLYTABdefspacefindipOtherPath(self,host):PLYTABTABsqlspace=space"selectspacepathspacefromspacemodulespacewherespaceipspace=space'%s'spaceandspacemodulenamespace!=space'configcenter'"space%hostPLYTABTABreturnspaceself.s.queryAll(sql)PLYPLYTAB#sainter_add_startPLYTABdefspacefindModuleInfo(self):PLYTABTABsqlspace=space"selectspaceip,port,pathspacefromspacemodule;"PLYTABTABreturnspaceself.s.queryAll(sql)PLYPLYTABdefspacefindIPByModName(self,modname):PLYTABTABsqlspace=space"selectspacedistinctspaceipspacefromspacemodulespacewherespacemodulenamespace=space'%s';"space%modnamePLYTABTABreturnspaceself.s.queryAll(sql)PLYPLYTABdefspacefindModByModName(self,modname,cpname):PLYTABTABsqlspace=space"selectspaceip,port,path,CPnamespacefromspacemodulespacewherespacemodulenamespace=space'%s'%s;"space%(modname,cpname)PLYTABTAB#printspacesqlPLYTABTABreturnspaceself.s.queryAll(sql)PLYPLYTAB#defspacefindModByModCpName(self,modname,cpname):PLYTAB#spacespacespacespacesqlspace=space"selectspaceip,port,pathspacefromspacemodulespacewherespacemodulenamespace=space'%s'spaceandspaceCPnamespace=space'%s';"space%(modname,cpname)PLYTAB#spacespacespacespacereturnspaceself.s.queryAll(sql)PLYPLYTABdefspacefindModByIP(self,host):PLYTABTABsqlspace=space"selectspaceip,port,path,CPnamespacefromspacemodulespacewherespaceipspace=space'%s';"space%hostPLYTABTABreturnspaceself.s.queryAll(sql)PLYPLYTABdefspacefindModByModAndIP(self,host,modname):PLYTABTABsqlspace=space"selectspaceip,port,path,CPnamespacefromspacemodulespacewherespaceipspace=space'%s'spaceandspacemodulenamespace=space'%s';"space%(host,modname)PLYTABTABreturnspaceself.s.queryAll(sql)PLYTAB#sainter_add_endPLYPLYTABdefspacefindModName(self):PLYTABTABsqlspace=space"selectspacedistinctspacemodulenamespacefromspacemodule;"PLYTABTABreturnspaceself.s.queryAll(sql)PLYPLYTAB#defspaceQTfindIp(self,mod):PLYTAB#spacespacespacespacesqlspace=space"selectspaceip,pathspacefromspacemodulespacewherespacemodulenamespace=space'%s'"space%modPLYTAB#spacespacespacespacereturnspaceself.s.queryAll(sql)PLYTABdefspaceQTfindIp(self,mod,cpname):PLYTABTABsqlspace=space"selectspaceip,pathspacefromspacemodulespacewherespacemodulenamespace=space'%s'%s"space%(mod,cpname)PLYTABTABreturnspaceself.s.queryAll(sql)PLYTABdefspaceQTfindPath(self,mod,ip):PLYTABTABsqlspace=space"selectspaceip,pathspacefromspacemodulespacewherespaceipspace=space'%s'spaceandspacemodulenamespace=space'%s'"space%(ip,mod)PLYTABTABreturnspaceself.s.queryAll(sql)PLYPLYTABdefspacefindHostsName(self):PLYTABTABsqlspace=space"selectspacedistinctspaceip,hostnamespacefromspacemodule;"PLYTABTABreturnspaceself.s.queryAll(sql)PLYPLYTABdefspaceonlyFindHostsName(self,ip):PLYTABTABsqlspace=space"selectspacedistinctspacehostnamespacefromspacemodulespacewherespaceipspace=space'%s';"%ipPLYTABTABreturnspaceself.s.queryAll(sql)PLYTABTABPLYTABdefspaceFindAllIpPath(self,modStr,orderStr):PLYTABTABsqlspace=space"selectspaceip,pathspacefromspacemodulespace%s%sspacespaceorderspacebyspaceipspaceASC;"%(modStr,orderStr)PLYTABTABreturnspaceself.s.queryAll(sql)PLYTABdefspaceFindAllIpPathD(self,modStr,orderStr):PLYTABTABsqlspace=space"selectspacedistinctspaceipspacefromspacemodulespace%s%sspacespaceorderspacebyspaceipspaceASC;"%(modStr,orderStr)PLYTABTABreturnspaceself.s.queryAll(sql)PLY
+#!/usr/bin/env python
+# encoding:utf-8
+__author__ = 'Chocolee'
+from SqliteClass import *
+
+class SQLClass(object):
+	s = SqliteClass('../conf/tsck.db')
+
+	def sendFileInfo(self):
+		sql = 'select ip,modulename,path,CPname from module;'
+		return self.s.queryAll(sql)
+
+	def findIpModInfo(self,ip,modname):
+		sql = "select ip,modulename,path,CPname,port from module \
+		where ip = '%s' and modulename = '%s';" %(ip,modname)
+		return self.s.queryAll(sql)
+
+	#def findIPInfo(self,modname):
+	#    sql = "select ip,modulename,path,CPname from module where modulename = '%s'" %modname
+	#    return self.s.queryAll(sql)
+
+	def findIPInfo(self,modname,cpname):
+		sql = "select ip,modulename,path,CPname,port from module where modulename = '%s'%s" %(modname,cpname)
+		return self.s.queryAll(sql)
+
+	def findUserPass(self,user):
+		sql = "select user,port,password from user where user = '%s'" %user
+		return self.s.queryAll(sql)
+
+	def findHosts(self):
+		sql = "select distinct ip from module;"
+		return self.s.queryAll(sql)
+
+	def findipConfPath(self,host):
+		sql = "select path from module where ip = '%s' and modulename = 'configcenter'" %host
+		return self.s.queryAll(sql)
+
+	def findipOtherPath(self,host):
+		sql = "select path from module where ip = '%s' and modulename != 'configcenter'" %host
+		return self.s.queryAll(sql)
+
+	#sainter_add_start
+	def findModuleInfo(self):
+		sql = "select ip,port,path from module;"
+		return self.s.queryAll(sql)
+
+	def findIPByModName(self,modname):
+		sql = "select distinct ip from module where modulename = '%s';" %modname
+		return self.s.queryAll(sql)
+
+	def findModByModName(self,modname,cpname):
+		sql = "select ip,port,path,CPname from module where modulename = '%s'%s;" %(modname,cpname)
+		#print sql
+		return self.s.queryAll(sql)
+
+	#def findModByModCpName(self,modname,cpname):
+	#    sql = "select ip,port,path from module where modulename = '%s' and CPname = '%s';" %(modname,cpname)
+	#    return self.s.queryAll(sql)
+
+	def findModByIP(self,host):
+		sql = "select ip,port,path,CPname from module where ip = '%s';" %host
+		return self.s.queryAll(sql)
+
+	def findModByModAndIP(self,host,modname):
+		sql = "select ip,port,path,CPname from module where ip = '%s' and modulename = '%s';" %(host,modname)
+		return self.s.queryAll(sql)
+	#sainter_add_end
+
+	def findModName(self):
+		sql = "select distinct modulename from module;"
+		return self.s.queryAll(sql)
+
+	#def QTfindIp(self,mod):
+	#    sql = "select ip,path from module where modulename = '%s'" %mod
+	#    return self.s.queryAll(sql)
+	def QTfindIp(self,mod,cpname):
+		sql = "select ip,path from module where modulename = '%s'%s" %(mod,cpname)
+		return self.s.queryAll(sql)
+	def QTfindPath(self,mod,ip):
+		sql = "select ip,path from module where ip = '%s' and modulename = '%s'" %(ip,mod)
+		return self.s.queryAll(sql)
+
+	def findHostsName(self):
+		sql = "select distinct ip,hostname from module;"
+		return self.s.queryAll(sql)
+
+	def onlyFindHostsName(self,ip):
+		sql = "select distinct hostname from module where ip = '%s';"%ip
+		return self.s.queryAll(sql)
+		
+	def FindAllIpPath(self,modStr,orderStr):
+		sql = "select ip,path from module %s%s  order by ip ASC;"%(modStr,orderStr)
+		return self.s.queryAll(sql)
+	def FindAllIpPathD(self,modStr,orderStr):
+		sql = "select distinct ip from module %s%s  order by ip ASC;"%(modStr,orderStr)
+		return self.s.queryAll(sql)
+
